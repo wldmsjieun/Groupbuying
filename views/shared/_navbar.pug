@@ -1,0 +1,29 @@
+nav.navbar.navbar-expand-lg.navbar-light.bg-white.fixed-top
+  .container(style='margin-left:13rem; margin-right:1rem')
+    a.navbar-brand(href='/')
+      img(src='https://ifh.cc/g/HwdkM.jpg' alt='logo' width='200px')
+    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarResponsive', aria-controls='navbarResponsive', aria-expanded='false', aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    #navbarResponsive.collapse.navbar-collapse
+     #navbarResponsive.d-flex.flex-column.flex-wrap.collapse.navbar-collapse
+      ul.navbar-nav.flex-row-reverse(style='width:45rem; margin-bottom:1rem')
+        li.nav-item.active
+          a.nav-link(href='/dips') 찜
+        li.nav-item.active
+          a.nav-link(href='/mypage' , style='margin-left:10px;') 마이페이지
+        li.nav-item.active
+          a.nav-link(href='/freeboard',  style='margin-left:10px;') 자유게시판
+        li.nav-item.active
+          a.nav-link(href='/basket') 같이 살까?
+        li.nav-item.active
+          a.nav-link(href='#' , style='margin-left:10px;')
+    
+      form.form-inline(action='http://www.naver.com')
+        input.form-control(type='text' placeholder='검색하실 내용을 입력하세요' style='width:25rem; height:3.2rem')
+        button.btn.btn-light(type='submit' style='height:3.2rem;margin-right:8rem')
+          img(src='https://image.flaticon.com/icons/svg/149/149852.svg' alt='search icon' width='25px')
+        select.custom-select(name='sorting')
+          option(selected='') 정렬
+          option(value='title') 제목순
+          option(value='dday') 마감일순
+          option(value='price') 가격순

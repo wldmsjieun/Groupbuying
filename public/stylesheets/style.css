@@ -1,0 +1,114 @@
+.but>button{
+  float:left
+}
+#cent-menu{
+padding:5px;
+  margin-top :25px;
+  background-color:white;
+  border-radius: .25rem;
+  background-size: 730px;
+}
+#cur_item{
+  padding:10px;
+    margin-top :25px;
+    background-color: #ededed;
+    border-radius: .25rem;
+    background-size: 730px;
+
+  }
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#user_index{
+  background-color: #ededed;
+  padding:10px;
+  width:100%;
+  height:200px;
+  float:left;
+  border-radius: .25rem;
+}
+
+#category{
+  background-color: #ededed;
+  margin-top:20px;
+  padding:10px;
+  width:100%;
+  height:400px;
+  float:left;
+  border-radius: .25rem;
+}
+.btn-ctg{
+            background-color:lightgrey;
+            border-bottom-color: lightgrey;
+            margin: .375rem 0rem;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5rem;
+
+            border:0px solid;
+            border-radius: .25rem;
+            width:100%;
+         }
+
+#loginn {
+  margin-top: 50px;
+}
+#cate {
+  text-align: center;
+}
+#page{
+  margin-left: 500px;
+}
+.pagination>ul{
+  list-style: none;
+}
+.nav-item  img {
+  width: 130px;
+  height : 130px;
+}
+.nav-item {
+  text-align: center;
+
+}
+#login #but>button {
+
+                     background-color: lightgrey;
+                     border-bottom-color: lightgrey;
+                     margin: .7rem 0rem;
+                     padding: .375rem .75rem;
+                     font-size: 1rem;
+                     line-height: 1.2rem;
+
+                     border:0px;
+                     border-radius: .25rem;
+
+                     width:110px;
+
+ }
+.pagination div:nth-child(1)
+{
+  float:left;
+}
+
+.pagination div:nth-child(2)
+{
+  float:left;
+}
+.pagination div:nth-child(3)
+{
+  float:left;
+}
+.pagination div:nth-child(4)
+{
+  float:left;
+}
+.pagination div:nth-child(5)
+{
+  float:left;
+}
