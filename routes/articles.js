@@ -21,8 +21,7 @@ router.post('/add', function(req, res){
 
   // Get Errors
   let errors = req.validationErrors();
-////commit 을 위한 주석
-////////
+
   if(errors){
     res.render('add_article', {
       title:'Add Article',
