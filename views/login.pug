@@ -1,13 +1,14 @@
 extends layout
 
 block content
-  h1 Login
-  form(method='POST', action='/users/login')
-    #form-group
-      label ID:
-      input.form-control(name='username',type='text')
-    #form-group
-      label Password:
-      input.form-control(name='password',type='password')
-    br
-    input.btn.btn-primary(type='submit',value='Submit')
+  .row
+    .col-lg-4
+    .col-lg-4
+      h2(style='margin-top:7rem; margin-bottom:3rem') 로그인
+      form(method='POST', action='/users/login')
+        #form-group
+          input.form-control(name='username',type='text', placeholder='아이디')
+        #form-group
+          input.form-control(name='password',type='password', placeholder='비밀번호', style='margin-top:1rem')
+        br
+        input.btn.btn-primary(type='submit',value='로그인', style='width:100%; margin-bottom:9rem')

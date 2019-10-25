@@ -1,16 +1,54 @@
 extends layout
 
 block content
-  h1 #{title}
-  form(method='POST', action='/articles/add' enctype="multipart/form-data")
-    #form-group
-      label Title:
-      input.form-control(name='title', type='text')
-    #form-group
-      label Body:
-      textarea.form-control(name='body')
-    #form-group
-      label(for="picture") 사진 올리기
-        input.form-control-file.border(type='file' name='picture' required)
-    br
-    input.btn.btn-primary(type='submit',value='Submit')
+  .container(style=' width: 1500px; margin-left:20rem;margin-top: 120px' enctype="multipart/form-data")
+    .row
+      .col-lg-8
+        h3 #{title}
+        form(method='POST', action='/articles/add')
+          #form-group
+            label 모집 마감일
+            input.form-control(name='deadline', type='date',min='2019-01-01')
+          #form-group
+            label 카테고리
+            select#sel1.form-control(name="category")
+              option 카테고리를 선택하세요
+              option 식자재
+              option 즉석식품
+              option 반찬
+              option 음료수/아이스크림
+              option 커피/차
+              option 해외직구
+              option 기타
+          #form-group
+            label 품목
+            input.form-control(name='item', type='text') 
+          #form-group
+            label 방 제목
+            input.form-control(name='title', type='text')  
+          #form-group
+            label 사진
+            input.form-control-file.border(name='picture', type='file') 
+          #form-group
+            label 모집인원
+            select#sel1.form-control(name='members', type='text')
+              option 모집할 인원을 선택하세요
+              option 2
+              option 3
+              option 4
+              option 5
+              option 6
+              option 7
+              option 8
+              option 9
+              option 10
+              option 11
+              option 12
+              option 13
+              option 14
+              option 15
+          #form-group
+            label 기타
+            textarea.form-control(name='body')
+          br
+          input.btn.btn-primary(type='submit',value='Submit', style='margin-bottom:5rem')

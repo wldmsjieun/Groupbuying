@@ -10,7 +10,7 @@ const User = require('../models/user');
 // Add Route
 router.get('/add', ensureAuthenticated, function(req, res){
   res.render('add_article', {
-    title:'Add Article'
+    title:'방 개설하기'
   });
 });
 

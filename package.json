@@ -4,7 +4,7 @@
   "description": "Simple knowledgebase app",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app"
+    "start": "nodemon ./bin/www"
   },
   "author": "Brad Traversy",
   "license": "ISC",
