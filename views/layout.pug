@@ -10,7 +10,7 @@ html
       != messages('message', locals)
       if errors
         each error, i in errors
-          div(class="alert alert-danger") #{error.msg}
+          div(class="alert alert-danger", style='width:100px') #{error.msg}
       block content
       br
       hr

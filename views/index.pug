@@ -19,16 +19,16 @@ block content
                 .col-lg-6
                   button.btn.btn-primary.btn-block(type="button" style=' width:100%' onclick="location.href='/users/logout'") 로그아웃
           else
-            form(method='POST', action='/users/login', style='padding-left:20px')
+            form(method='POST', action='/users/login', style='padding:5px')
               .form-group
                 input.form-control(name='username', type='text', placeholder='아이디')
               .form-group
                 input.form-control(name='password', type='password', placeholder='비밀번호')
               div
                 button.btn.btn-primary.btn-block(type='submit', value='Submit') 로그인
-              #but(style='width : 10px flaot = left')
-                button(type="button" onclick="location.href='./forgot'") ID/PW찾기
-                button(type="button" style='margin-left : 10px' onclick="location.href='/users/register'") 회원가입
+              #but
+                button(type="button" style="width:115px", onclick="location.href='./forgot'") ID/PW찾기
+                button(type="button" style='margin-left : 15px; width:115px;' onclick="location.href='/users/register'") 회원가입
         #category
           p(align='center' style='font-size:1rem') 카테고리
           button.btn-ctg 식자재
@@ -50,7 +50,7 @@ block content
 
         // /.row
 
-      .col-lg-1(style='margin-top:50px;')
+      .col-lg-1
         nav.navbar(class='navbar-expand-xl|lg|md|sm')
           ul.navbar-nav
             #cur_item
