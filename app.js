@@ -6,32 +6,24 @@ const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const config = require('./config/database');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+
+// Init App
+const app = express();
 
 //mongoose.connect(config.database, { useNewUrlParser: true,  useUnifiedTopology: true });
 mongoose.Promise = global.Promise; // ES6 Native Promise를 mongoose에서 사용한다.
 const connStr = 'mongodb://localhost/alonedb';
 mongoose.connect(connStr, { useNewUrlParser: true,  useUnifiedTopology: true });
 mongoose.connection.on('error', console.error);
-// var promise = mongoose.connect(config.database,{ useNewUrlParser: true, useUnifiedTopology: true });
-// var promise = mongoose.createConnection(config.database);
-let db = mongoose.connection;
 
-// Check connection
-db.once('open', function(){
-  console.log('Connected to MongoDB');
-});
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Check for DB errors
-db.on('error', function(err){
-  console.log(err);
-});
-
-// Init App
-const app = express();
-
-// Bring in Models
-let Article = require('./models/article');
 
 // Load View Engine
 app.set('views', path.join(__dirname, 'views'));
@@ -40,7 +32,6 @@ app.set('view engine', 'pug');
 // Body Parser Middleware
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
 app.use(bodyParser.json());
 
 // Set Public Folder
@@ -89,27 +80,22 @@ app.get('*', function(req, res, next){
   next();
 });
 
-// Home Route
-app.get('/', function(req, res){
-  Article.find({}, function(err, articles){
-    if(err){
-      console.log(err);
-    } else {
-      res.render('index', {
-        title:'Articles',
-        articles: articles
-      });
-    }
-  });
-});
-
 // Route Files
-let articles = require('./routes/articles');
-let users = require('./routes/users');
-app.use('/articles', articles);
-app.use('/users', users);
+const articlesRouter = require('./routes/articles');
+const usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+
+app.use('/',indexRouter);
+app.use('/articles', articlesRouter);
+app.use('/users', usersRouter);
+app.use('/picture', express.static('picture'));
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
 // Start Server
 app.listen(3000, function(){
-  console.log('Server started on port 3000...');
+  // console.log('Server started on port 3000...');
 });

@@ -13,7 +13,8 @@ let articleSchema = mongoose.Schema({
   body:{
     type: String,
     required: true
-  }
+  },
+  picture_url : {type:String}
 });
 
 let Article = module.exports = mongoose.model('Article', articleSchema);

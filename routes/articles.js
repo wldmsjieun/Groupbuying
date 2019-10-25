@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-////////
-// Article Model
-let Article = require('../models/article');
-// User Model
-let User = require('../models/user');
+const multer = require('multer');   // express에 multer모듈 적용 (for 파일업로드)
+const upload = multer({ dest: 'picture/' }); //img를 올리기 위한 module 정의
+const errorCatcher = require('../lib/async-error');
+
+const Article = require('../models/article');
+const User = require('../models/user');
 
 // Add Route
 router.get('/add', ensureAuthenticated, function(req, res){
@@ -13,37 +14,18 @@ router.get('/add', ensureAuthenticated, function(req, res){
   });
 });
 
-// Add Submit POST Route
-router.post('/add', function(req, res){
-  req.checkBody('title','Title is required').notEmpty();
-  //req.checkBody('author','Author is required').notEmpty();
-  req.checkBody('body','Body is required').notEmpty();
+router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => {
+  var name = req.file.filename;
+  var new_post = new Article({
+    title : req.body.title,
+    author : req.user._id,
+    body : req.body.body,
+    picture_url : "picture/" + name
+  });
+  await new_post.save();
 
-  // Get Errors
-  let errors = req.validationErrors();
-////
-  if(errors){
-    res.render('add_article', {
-      title:'Add Article',
-      errors:errors
-    });
-  } else {
-    let article = new Article();
-    article.title = req.body.title;
-    article.author = req.user._id;
-    article.body = req.body.body;
-
-    article.save(function(err){
-      if(err){
-        console.log(err);
-        return;
-      } else {
-        req.flash('success','Article Added');
-        res.redirect('/');
-      }
-    });
-  }
-});
+  res.redirect("/");
+}));
 
 // Load Edit Form
 router.get('/edit/:id', ensureAuthenticated, function(req, res){
@@ -103,14 +85,7 @@ router.delete('/:id', function(req, res){
 
 // Get Single Article
 router.get('/:id', function(req, res){
-  Article.findById(req.params.id, function(err, article){
-    User.findById(article.author, function(err, user){
-      res.render('article', {
-        article:article,
-        author: user.name
-      });
-    });
-  });
+ 
 });
 
 // Access Control
