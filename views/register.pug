@@ -1,0 +1,102 @@
+//- extends layout
+
+//- block content
+//-   h1 Register
+//-   form(method='POST', action='/users/register')
+//-     #form-group
+//-       label 이름:
+//-       input.form-control(name='name', type='text')
+//-     #form-group
+//-       label 이메일:
+//-       input.form-control(name='email', type='text')
+//-     #form-group
+//-       label 아이디:
+//-       input.form-control(name='username',type='text')
+//-     #form-group
+//-       label 비밀번호:
+//-       input.form-control(name='password',type='password')
+//-     #form-group
+//-       label 비밀번호 확인:
+//-       input.form-control(name='password2',type='password')
+//-     br
+//-     input.btn.btn-primary(type='submit',value='Submit')
+
+//- link(href='css/bootstrap.min.css', rel='stylesheet')
+extends layout
+
+block content
+  .container
+    form#contact_form.well.form-horizontal(method='POST' action='/users/register' style="background-color:white")
+      fieldset
+        // Form Name
+        legend
+          center
+            h2
+              b 회원가입
+        br
+        // Text input
+        .form-group
+          label.col-md-4.control-label 이름
+          .col-md-4.inputGroupContainer
+            .input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-user
+              input.form-control(name='name' placeholder='이름' type='text')
+
+        // Text input
+        .form-group
+          label.col-md-4.control-label 이메일
+          .col-md-4.inputGroupContainer
+            .input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-envelope
+              input.form-control(name='email' placeholder='email' type='text')
+        // Text input
+        .form-group
+          label.col-md-4.control-label 아이디
+          .col-md-4.inputGroupContainer
+            .input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-user
+              input.form-control(name='username' placeholder='아이디' type='text')
+        // Text input
+        .form-group
+          label.col-md-4.control-label 비밀번호 
+          .col-md-4.inputGroupContainer
+            .input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-user
+              input.form-control(name='password' placeholder='비밀번호' type='password')
+        // Text input
+        .form-group
+          label.col-md-4.control-label 비밀번호 확인
+          .col-md-4.inputGroupContainer
+            .input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-user
+              input.form-control(name='password2' placeholder='비밀번호 확인' type='password')
+        // Text input
+        .form-group
+          label.col-md-4.control-label 전화번호
+          .col-md-4.inputGroupContainer
+            .input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-earphone
+              input.form-control(name='phone' placeholder='전화번호' type='text')
+        .form-group
+          label.col-md-4.control-label 주소
+          .col-md-4.inputGroupContainer
+            .input-group
+              span.input-group-addon
+                i.glyphicon.glyphicon-home
+              input.form-control(name='address' placeholder='주소' type='text')
+        // Select Basic
+        // Success message
+        
+        // Button
+        .form-group
+          label.col-md-4.control-label
+          .col-md-4
+            br
+            | 위 내용으로 회원가입 하시겠습니까?
+            button.btn.btn-primary(type='submit' style="margin-left:10px") 가입하기
