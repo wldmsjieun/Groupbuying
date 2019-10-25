@@ -8,7 +8,13 @@ const session = require('express-session');
 const passport = require('passport');
 const config = require('./config/database');
 
-mongoose.connect(config.database);
+//mongoose.connect(config.database, { useNewUrlParser: true,  useUnifiedTopology: true });
+var promise = mongoose.connect(config.database, {
+  useMongoClient: true,
+});
+var promise = mongoose.createConnection(config.database, {
+  useMongoClient: true,
+});
 let db = mongoose.connection;
 
 // Check connection

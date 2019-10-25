@@ -5,8 +5,7 @@ const router = express.Router();
 let Article = require('../models/article');
 // User Model
 let User = require('../models/user');
-/////////
-//////////
+
 // Add Route
 router.get('/add', ensureAuthenticated, function(req, res){
   res.render('add_article', {
