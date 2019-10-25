@@ -9,12 +9,12 @@ const passport = require('passport');
 const config = require('./config/database');
 
 //mongoose.connect(config.database, { useNewUrlParser: true,  useUnifiedTopology: true });
-var promise = mongoose.connect(config.database, {
-  useMongoClient: true,
-});
-var promise = mongoose.createConnection(config.database, {
-  useMongoClient: true,
-});
+mongoose.Promise = global.Promise; // ES6 Native Promise를 mongoose에서 사용한다.
+const connStr = 'mongodb://localhost/alonedb';
+mongoose.connect(connStr, { useNewUrlParser: true,  useUnifiedTopology: true });
+mongoose.connection.on('error', console.error);
+// var promise = mongoose.connect(config.database,{ useNewUrlParser: true, useUnifiedTopology: true });
+// var promise = mongoose.createConnection(config.database);
 let db = mongoose.connection;
 
 // Check connection

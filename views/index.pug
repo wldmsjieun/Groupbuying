@@ -6,3 +6,7 @@ block content
     each article, i in articles
       li.list-group-item
         a(href="/articles/"+article._id)= article.title
+        h5 Written by #{article.author}
+    
+
+
