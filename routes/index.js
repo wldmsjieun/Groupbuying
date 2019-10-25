@@ -11,5 +11,25 @@ router.get('/', errorCatcher (async(req, res,next) => {
     var articles = await Article.find();
     res.render('index', {title:'Articles',articles: articles});
 }));
+/* GET home page. */
+router.get('/home', errorCatcher(async(req, res, next) => {
+    res.render('/', { title: 'YouAloneLive' });
+  }));
 
+  
+   /* GET Mypage page. */
+   router.get('/mypage', errorCatcher(async(req, res, next) => {
+     res.render('home/mypage', { title: 'MyPage' });
+   }));
+   /* GET Freeboard page. */
+   router.get('/freeboard', errorCatcher(async(req, res, next) => {
+     res.render('home/freeboard', { title: 'Freeboard' });
+   }));
+   /* GET Basket page. */
+   router.get('/basket', errorCatcher(async(req, res, next) => {
+     res.render('home/basket', { title: 'Basket' });
+   }));
+   router.get('/dips', errorCatcher(async(req, res, next) => {
+     res.render('home/dips', { title: 'Dips' });
+   }));
 module.exports = router;

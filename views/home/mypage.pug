@@ -1,0 +1,81 @@
+extends ../layout
+
+block content
+  .container(style=' width: 1500px; margin-top: 100px')  
+    .row
+      .col-lg-3
+        #login(style='margin-top:30px; margin-left:20px')
+          form
+            .form-group
+              input#id.form-control(type='text' placeholder='아이디')
+            .form-group
+              input#pw.form-control(type='password' placeholder='비밀번호')
+            div
+              button.btn.btn-primary.btn-block 로그인
+            #but(style='width : 10px flaot = left')
+              button ID/PW찾기
+              button(style='margin-left : 10px') 회원가입
+        #category
+          p(align='center' style='font-size:1rem') 카테고리
+          button.btn-ctg 식자재
+          button.btn-ctg 즉석식품
+          button.btn-ctg 반찬
+          button.btn-ctg 음료수/아이스크림
+          button.btn-ctg 커피/차
+          button.btn-ctg 해외직구
+          button.btn-ctg 기타
+        
+      .col-lg-8(style='margin-top:30px; padding-left:30px')
+        h2(style='margin-bottom:30px') 마이페이지
+
+        table.table.table-borderless
+          thead
+          tbody
+          tr
+            td 아이디
+            td
+              input.form-control(type='text' placeholder='mju12334' readonly='')
+          tr
+            td 이름
+            td
+              input.form-control(type='text' placeholder='박지민')
+          tr
+            td 비밀번호 변경
+            td
+              button.btn.btn-secondary(type='button' onclick="window.open('http://google.com')")
+                |비밀번호 변경
+          tr
+            td 전화번호
+            td
+              input.form-control(type='text' placeholder='010-1234-5678')
+          tr
+            td 주소
+            td
+              input.form-control(type='text' placeholder='경기도 용인시 처인구 명지로123')
+        button.btn.btn-primary(type='button' style='float:right; margin-left: 1.5rem; margin-right:1rem; width:5rem') 변경
+        button.btn.btn-warning(type='button' style='float:right;width:5rem') 초기화
+
+
+      .col-lg-1(style='margin-top:50px;')
+        nav.navbar(class='navbar-expand-xl|lg|md|sm')
+          ul.navbar-nav
+            #cur_item
+              h5(style='text-align:center') 최근목록
+                li.nav-item
+                  a.nav-link(href='#', style='color:black')
+                    img(src='images/potato.jpg')
+                    | 알감자
+                li.nav-item
+                  a.nav-link(href='#', style='color:black')
+                    img(src='images/fish.jpg')
+                    //-이 밑에 주석은 혹시 모르니까 남겨놔 주세요~ 
+                    //-img(src='picture/9437d3e417037c1b221518d08832782f')
+                    | 고등어
+                li.nav-item
+                  a.nav-link(href='#', style='color:black')
+                    img(src='images/pororo.jpg')
+                    | 뽀로로 인형
+                li.nav-item
+                  a.nav-link(href='#', style='color:black')
+                    img(src='images/knife.jpg')
+                    | 장미칼

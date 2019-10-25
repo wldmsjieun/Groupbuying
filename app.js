@@ -71,7 +71,6 @@ app.use(expressValidator({
 
 // Passport Config
 require('./config/passport')(passport);
-// Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -84,10 +83,15 @@ app.get('*', function(req, res, next){
 const articlesRouter = require('./routes/articles');
 const usersRouter = require('./routes/users');
 const indexRouter = require('./routes/index');
+const freeboardRouter = require('./routes/freeboard');
+const basketRouter = require('./routes/basket');
+
 
 app.use('/',indexRouter);
 app.use('/articles', articlesRouter);
 app.use('/users', usersRouter);
+app.use('/freeboard',freeboardRouter);
+app.use('/basket',basketRouter);
 app.use('/picture', express.static('picture'));
 
 // catch 404 and forward to error handler
