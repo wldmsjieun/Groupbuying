@@ -44,7 +44,7 @@ block content
         ul.list-group
           each article, i in articles
             li.list-group-item
-              a(href="/articles/"+article._id)= article.title
+              a(href='/articles/'+article._id)= article.title
         
         button.btn.btn-warning(type='button' style='float:right; width:5rem; margin-right:1rem; margin-bottom:3rem' onclick="location.href='/articles/add'") 방 개설
 

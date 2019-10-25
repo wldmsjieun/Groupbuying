@@ -33,11 +33,23 @@ router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => 
 
 // Load Edit Form
 router.get('/edit/:id', ensureAuthenticated, function(req, res){
+  var maker, accId;
+ 
+  User.findById(req.params.id, function(err, user){
+    accId = req.user._id;
+  });
   Article.findById(req.params.id, function(err, article){
-    if(article.author != req.user._id){
+    maker = article.room_maker;
+  
+  
+  // console.log("maker : " + maker);
+  // console.log("accId : " + accId);
+
+    if(maker != accId){
       req.flash('danger', 'Not Authorized');
       return res.redirect('/');
     }
+
     res.render('edit_article', {
       title:'Edit Article',
       article:article
@@ -49,7 +61,7 @@ router.get('/edit/:id', ensureAuthenticated, function(req, res){
 router.post('/edit/:id', function(req, res){
   let article = {};
   article.title = req.body.title;
-  article.author = req.body.author;
+ // article.author = req.body.author;
   article.body = req.body.body;
 
   let query = {_id:req.params.id}
@@ -74,7 +86,7 @@ router.delete('/:id', function(req, res){
   let query = {_id:req.params.id}
 
   Article.findById(req.params.id, function(err, article){
-    if(article.author != req.user._id){
+    if(article.room_maker != req.user._id){
       res.status(500).send();
     } else {
       Article.remove(query, function(err){
@@ -87,9 +99,32 @@ router.delete('/:id', function(req, res){
   });
 });
 
+// function authCheck(req, res){
+//   console.log("enter authCheck");
+//   Article.findById(req.params.id, function(err, article){
+//     if(article.room_maker != req.user._id){
+//       req.flash('danger', 'Not Authorized');
+//       return res.redirect('/');
+//     }else{
+//       res.redirect('../articles/edit/' + article.room_maker);
+//     }
+//   });
+// }
+
 // Get Single Article
 router.get('/:id', function(req, res){
- 
+  Article.findById(req.params.id, function(err, article){
+    User.findById(article.room_maker, function(err, user){
+      // console.log(req.params.id);
+      // console.log(article.room_maker);
+      res.render('article', {
+        article:article,
+        author: user.name
+      });
+    });
+  });
+  // console.log("i'm going authCheck");
+  // authCheck(req, res);
 });
 
 // Access Control
@@ -101,5 +136,6 @@ function ensureAuthenticated(req, res, next){
     res.redirect('/users/login');
   }
 }
+
 
 module.exports = router;

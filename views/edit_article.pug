@@ -1,16 +1,26 @@
 extends layout
-
+//- front 수정시 back부분 보고 수정해주세요 제발
+//- 앞에 건들면 뒤에 다 에러나요 .js파일 되도록 건들지 마세요
 block content
   h1 #{title}
   form(method='POST', action='/articles/edit/'+article._id)
+    br
+    br
+    br
+    br
+    br
+    br
+    br
+    br
     #form-group
       label Title:
       input.form-control(name='title', type='text', value=article.title)
+    //- #form-group
+    //-   label Author:
+    //-   input.form-control(name='author', type='text', value=article.author)
     #form-group
-      label Author:
-      input.form-control(name='author', type='text', value=article.author)
-    #form-group
-      label Body:
-      textarea.form-control(name='body')= article.body
+      label comment:
+      textarea.form-control(name='comment')= article.comment
     br
     input.btn.btn-primary(type='submit',value='Submit')
+
