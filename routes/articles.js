@@ -17,10 +17,14 @@ router.get('/add', ensureAuthenticated, function(req, res){
 router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => {
   var name = req.file.filename;
   var new_post = new Article({
+    room_maker : req.user._id,
+    deadline : req.body.deadline,
+    category : req.body.category,
+    item : req.body.item,
     title : req.body.title,
-    author : req.user._id,
-    body : req.body.body,
-    picture_url : "picture/" + name
+    members : req.body.members,
+    comment : req.body.comment,
+    picture_url : "picture/" + name,
   });
   await new_post.save();
 

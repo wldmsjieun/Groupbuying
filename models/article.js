@@ -1,20 +1,21 @@
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // Article Schema
-let articleSchema = mongoose.Schema({
-  title:{
-    type: String,
-    required: true
-  },
-  author:{
-    type: String,
-    required: true
-  },
-  body:{
-    type: String,
-    required: true
-  },
-  picture_url : {type:String}
+var schema = Schema({
+  room_maker : {type:String, required:true},//개설자
+  deadline : {type:String},//모집기한
+  category : {type:String},//카테고리
+  item : {type:String, required:true},//품목
+  title : {type:String},//방제목
+  picture_url : {type:String},
+  members : {type:String},
+  comment : {type:String},//하고싶은 말
+  createdAt: {type: Date, default: Date.now},//개설날짜
+},{
+  toJSON:{virtuals:true},
+  toObject: {virtuals: true}
 });
 
-let Article = module.exports = mongoose.model('Article', articleSchema);
+var Article = mongoose.model('Article', schema);
+module.exports = Article;
