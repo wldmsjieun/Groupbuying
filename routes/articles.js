@@ -51,7 +51,7 @@ router.get('/edit/:id', ensureAuthenticated, function(req, res){
     }
 
     res.render('edit_article', {
-      title:'Edit Article',
+      title:'수정하기',
       article:article
     });
   });

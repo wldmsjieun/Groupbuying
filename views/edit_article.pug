@@ -1,26 +1,42 @@
 extends layout
-//- front 수정시 back부분 보고 수정해주세요 제발
-//- 앞에 건들면 뒤에 다 에러나요 .js파일 되도록 건들지 마세요
-block content
-  h1 #{title}
-  form(method='POST', action='/articles/edit/'+article._id)
-    br
-    br
-    br
-    br
-    br
-    br
-    br
-    br
-    #form-group
-      label Title:
-      input.form-control(name='title', type='text', value=article.title)
-    //- #form-group
-    //-   label Author:
-    //-   input.form-control(name='author', type='text', value=article.author)
-    #form-group
-      label comment:
-      textarea.form-control(name='comment')= article.comment
-    br
-    input.btn.btn-primary(type='submit',value='Submit')
 
+block content
+  .container(style=' width: 1500px;margin-top: 120px' )
+    .row
+      .col-lg-2
+      .col-lg-8
+        h2 #{title}
+        form(method='POST', action='/articles/edit/'+article._id)
+          #form-group
+            label 모집 마감일
+            input.form-control(name='deadline',type='date', value=article.deadline)
+          #form-group
+            label 카테고리
+            select#sel1.form-control(name='category', value=article.category)
+              option 카테고리를 선택하세요
+              option 식자재
+              option 즉석식품
+              option 반찬
+              option 음료수/아이스크림
+              option 커피/차
+              option 해외직구
+              option 기타
+          #form-group
+            label 품목
+            input.form-control(name='item', type='text', value=article.item)
+          #form-group
+            label 방제목
+            input.form-control(name='title', type='text', value=article.title)
+          #form-group(style='display:none')
+            label author
+            input.form-control(name='author', type='text', value=article.author)
+          //- // 사진 수정 추가해야함.
+          #form-group
+            label 모집 인원
+            input.form-control(name='members', value=article.members)
+          #form-group
+            label 하고싶은 말
+            textarea.form-control(name='body', cols='30', rows='5')= article.body
+          
+          br
+          input.btn.btn-primary(type='submit',value='Submit')

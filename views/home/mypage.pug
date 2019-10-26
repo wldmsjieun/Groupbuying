@@ -4,17 +4,21 @@ block content
   .container(style=' width: 1500px; margin-top: 100px')  
     .row
       .col-lg-3
-        #login(style='margin-top:30px; margin-left:20px')
-          form
-            .form-group
-              input#id.form-control(type='text' placeholder='아이디')
-            .form-group
-              input#pw.form-control(type='password' placeholder='비밀번호')
-            div
-              button.btn.btn-primary.btn-block 로그인
-            #but(style='width : 10px flaot = left')
-              button ID/PW찾기
-              button(style='margin-left : 10px') 회원가입
+        #login(style='margin-top:30px')
+          if user
+            #user_index
+              .row
+                .col-lg-5
+                  img(src='../image/smile.png', width='100px', style="margin-left:5px;margin-top:5px")
+                .col-lg-7(style='margin-top:25px')
+                  p(style='line-height:0%') #{user.name} 님,
+                  | 환영합니다!
+                  p(style='margin-top:15px') 알림(1)
+              .row(style="padding-top:20px")
+                .col-lg-6
+                  button.btn.btn-primary.btn-block(type="button", style='width:100%', onclick="location.href='./mypage'") 내정보
+                .col-lg-6
+                  button.btn.btn-primary.btn-block(type="button" style=' width:100%' onclick="location.href='/users/logout'") 로그아웃
         #category
           p(align='center' style='font-size:1rem') 카테고리
           button.btn-ctg 식자재
@@ -34,11 +38,11 @@ block content
           tr
             td 아이디
             td
-              input.form-control(type='text' placeholder='mju12334' readonly='')
+              input.form-control(type='text' placeholder='#{user.id}' readonly='')
           tr
             td 이름
             td
-              input.form-control(type='text' placeholder='박지민')
+              input.form-control(type='text' placeholder= #{user.name} )
           tr
             td 비밀번호 변경
             td
