@@ -33,25 +33,14 @@ router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => 
 
 // Load Edit Form
 router.get('/edit/:id', ensureAuthenticated, function(req, res){
-  var maker, accId;
- 
-  User.findById(req.params.id, function(err, user){
-    accId = req.user._id;
-  });
-  Article.findById(req.params.id, function(err, article){
-    maker = article.room_maker;
-  
-  
-  // console.log("maker : " + maker);
-  // console.log("accId : " + accId);
 
-    if(maker != accId){
+  Article.findById(req.params.id, function(err, article){
+    if(article.room_maker != req.user._id){
       req.flash('danger', 'Not Authorized');
       return res.redirect('/');
     }
-
     res.render('edit_article', {
-      title:'수정하기',
+      title:'Edit Article',
       article:article
     });
   });
@@ -59,10 +48,14 @@ router.get('/edit/:id', ensureAuthenticated, function(req, res){
 
 // Update Submit POST Route
 router.post('/edit/:id', function(req, res){
+
   let article = {};
+  article.deadline = req.body.deadline;
+  article.category = req.body.category;
+  article.item = req.body.item;
   article.title = req.body.title;
- // article.author = req.body.author;
-  article.body = req.body.body;
+  article.members = req.body.members;
+  article.comment = req.body.comment;
 
   let query = {_id:req.params.id}
 
