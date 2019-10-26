@@ -11,7 +11,10 @@ const cookieParser = require('cookie-parser');
 
 // Init App
 const app = express();
-
+// html
+if (app.get('env') === 'development') {
+  app.locals.pretty = true;
+}
 //mongoose.connect(config.database, { useNewUrlParser: true,  useUnifiedTopology: true });
 mongoose.Promise = global.Promise; // ES6 Native Promise를 mongoose에서 사용한다.
 const connStr = 'mongodb://localhost/alonedb';

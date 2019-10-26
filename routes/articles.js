@@ -24,7 +24,7 @@ router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => 
     title : req.body.title,       // 방 제목
     members : req.body.members,   // 모집인원
     comment : req.body.comment,   // 하고싶은말
-    picture_url : "picture/" + name,  // 품목사진
+    picture_url : "/picture/" + name,  // 품목사진
   });
   await new_post.save();
 
@@ -110,6 +110,7 @@ router.get('/:id', function(req, res){
     User.findById(article.room_maker, function(err, user){
       // console.log(req.params.id);
       // console.log(article.room_maker);
+      // console.log(article);
       res.render('article', {
         article:article,
         author: user.name
