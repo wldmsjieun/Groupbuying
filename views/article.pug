@@ -30,23 +30,23 @@ block content
                 .col-lg-7(style='margin-top:25px')
                   p(style='line-height:0%') #{user.name} 님,
                   | 환영합니다!
-                  p(style='margin-top:10px') 알림(1)
-              .row(style='padding-top:2rem')
+                  p(style='margin-top:15px') 알림(1)
+              .row(style="padding-top:20px")
                 .col-lg-6
                   button.btn.btn-primary.btn-block(type="button", style='width:100%', onclick="location.href='./mypage'") 내정보
                 .col-lg-6
                   button.btn.btn-primary.btn-block(type="button" style=' width:100%' onclick="location.href='/users/logout'") 로그아웃
           else
-            form(method='POST', action='/users/login', style='padding-left:20px')
+            form(method='POST', action='/users/login', style='padding:5px')
               .form-group
                 input.form-control(name='username', type='text', placeholder='아이디')
               .form-group
                 input.form-control(name='password', type='password', placeholder='비밀번호')
               div
                 button.btn.btn-primary.btn-block(type='submit', value='Submit') 로그인
-              #but(style='width : 10px flaot = left')
-                button(type="button" onclick="location.href='./forgot'") ID/PW찾기
-                button(type="button" style='margin-left : 10px' onclick="location.href='/users/register'") 회원가입
+              #but
+                button(type="button" style="width:115px", onclick="location.href='./forgot'") ID/PW찾기
+                button(type="button" style='margin-left : 15px; width:115px;' onclick="location.href='/users/register'") 회원가입
         #category
           p(align='center' style='font-size:1rem') 카테고리
           button.btn-ctg 식자재
@@ -57,9 +57,9 @@ block content
           button.btn-ctg 해외직구
           button.btn-ctg 기타
       .col-lg-8
-        .row
+        .row(style='margin-top:50px')
           .col-lg-5
-            img(width="250px" class="img-fluid" src='../images/potato.jpg' alt='사진')
+            img(src="", alt='사진', width='80%')
             div(align='center' style="margin-top:1rem")
               h5 개설자가 전해주는 말
               p #{article.comment}
@@ -67,11 +67,14 @@ block content
             table.table.table-hover
               thead
                 tr
-                  th(colspan='3') #{article.title}
+                  th(colspan='3', style='font-size:2rem') #{article.title}
               tbody
                 tr
+                  td(style='width:30%') 품목
+                  td #{article.item}
+                tr
                   td 카테고리
-                  td #{article.category}
+                  td #{article.category}  
                 tr
                   td 개설자
                   td #{author}
@@ -84,6 +87,6 @@ block content
                 tr
                   td 모집 인원
                   td #{article.members}
-        a.btn.btn-default(type='button' href='/articles/edit/'+article._id) 수정
-        a.btn.btn-danger.delete-article(href='#',data-id=article._id) 삭제
+        a.btn.btn-secondary(role='button' href='/articles/edit/'+article._id, style='width:5rem; margin-right:1rem') 수정
+        a.btn.btn-danger.delete-article(href='#',data-id=article._id, style='width:5rem') 삭제
   
