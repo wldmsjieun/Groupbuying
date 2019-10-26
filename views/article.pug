@@ -1,21 +1,89 @@
 extends layout
 
+//- block content
+//-   br
+//-   br
+//-   br
+//-   br
+//-   br
+//-   h1= article.title
+//-   h5 Written by #{author}
+//-   p= article.body
+//-   hr
+//-   if user
+//-     if user.id == article.room_maker 
+//-       br
+//-       br
+//-       br
+//-       a.btn.btn-default(type='button' href='/articles/edit/'+article._id) 수정
+//-       a.btn.btn-danger.delete-article(href='#',data-id=article._id) 삭제
 block content
-  br
-  br
-  br
-  br
-  br
-  h1= article.title
-  h5 Written by #{author}
-  p= article.body
-  hr
-  if user
-    if user.id == article.room_maker 
-      br
-      br
-      br
-      a.btn.btn-default(href='/articles/edit/'+article._id) Edit 
-      a.btn.btn-danger.delete-article(href='#',data-id=article._id) Delete
-  
+  .container(style=' width: 1500px; margin-top: 100px')
+    .row
+      .col-lg-3
+        #login(style='margin-top:30px')
+          if user
+            #user_index
+              .row
+                .col-lg-5
+                  img(src='../image/smile.png', width='100px', style="margin-left:5px;margin-top:5px")
+                .col-lg-7(style='margin-top:25px')
+                  p(style='line-height:0%') #{user.name} 님,
+                  | 환영합니다!
+                  p(style='margin-top:10px') 알림(1)
+              .row(style='padding-top:2rem')
+                .col-lg-6
+                  button.btn.btn-primary.btn-block(type="button", style='width:100%', onclick="location.href='./mypage'") 내정보
+                .col-lg-6
+                  button.btn.btn-primary.btn-block(type="button" style=' width:100%' onclick="location.href='/users/logout'") 로그아웃
+          else
+            form(method='POST', action='/users/login', style='padding-left:20px')
+              .form-group
+                input.form-control(name='username', type='text', placeholder='아이디')
+              .form-group
+                input.form-control(name='password', type='password', placeholder='비밀번호')
+              div
+                button.btn.btn-primary.btn-block(type='submit', value='Submit') 로그인
+              #but(style='width : 10px flaot = left')
+                button(type="button" onclick="location.href='./forgot'") ID/PW찾기
+                button(type="button" style='margin-left : 10px' onclick="location.href='/users/register'") 회원가입
+        #category
+          p(align='center' style='font-size:1rem') 카테고리
+          button.btn-ctg 식자재
+          button.btn-ctg 즉석식품
+          button.btn-ctg 반찬
+          button.btn-ctg 음료수/아이스크림
+          button.btn-ctg 커피/차
+          button.btn-ctg 해외직구
+          button.btn-ctg 기타
+      .col-lg-8
+        .row
+          .col-lg-5
+            img(width="250px" class="img-fluid" src='../images/potato.jpg' alt='사진')
+            div(align='center' style="margin-top:1rem")
+              h5 개설자가 전해주는 말
+              p #{article.comment}
+          .col-lg-7
+            table.table.table-hover
+              thead
+                tr
+                  th(colspan='3') #{article.title}
+              tbody
+                tr
+                  td 카테고리
+                  td #{article.category}
+                tr
+                  td 개설자
+                  td #{author}
+                tr
+                  td 개설일자
+                  td #{article.createdAt}
+                tr
+                  td 마감일자
+                  td #{article.deadline}
+                tr
+                  td 모집 인원
+                  td #{article.members}
+        a.btn.btn-default(type='button' href='/articles/edit/'+article._id) 수정
+        a.btn.btn-danger.delete-article(href='#',data-id=article._id) 삭제
   

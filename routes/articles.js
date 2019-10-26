@@ -17,14 +17,14 @@ router.get('/add', ensureAuthenticated, function(req, res){
 router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => {
   var name = req.file.filename;
   var new_post = new Article({
-    room_maker : req.user._id,
-    deadline : req.body.deadline,
-    category : req.body.category,
-    item : req.body.item,
-    title : req.body.title,
-    members : req.body.members,
-    comment : req.body.comment,
-    picture_url : "picture/" + name,
+    room_maker : req.user._id,  // 개설자
+    deadline : req.body.deadline, // 마감날짜
+    category : req.body.category, // 카테고리
+    item : req.body.item,         // 품목
+    title : req.body.title,       // 방 제목
+    members : req.body.members,   // 모집인원
+    comment : req.body.comment,   // 하고싶은말
+    picture_url : "picture/" + name,  // 품목사진
   });
   await new_post.save();
 
