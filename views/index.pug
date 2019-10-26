@@ -46,7 +46,9 @@ block content
           each article, i in articles
             li.list-group-item
               a(href='/articles/'+article._id)= article.title
-              <br> #{article.body}
+              <br>
+              img(src= article.picture_url, width='30%')
+              <br> #{article.comment}
               <br> 모집기한 #{article.deadline}
         button.btn.btn-warning(type='button' style='float:right; width:5rem; margin-top:1rem; margin-right:1rem; margin-bottom:3rem' onclick="location.href='/articles/add'") 방 개설
 
