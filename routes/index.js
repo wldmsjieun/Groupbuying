@@ -18,7 +18,7 @@ router.get('/home', errorCatcher(async(req, res, next) => {
 
   
    /* GET Mypage page. */
-   router.get('/mypage', errorCatcher(async(req, res, next) => {
+   router.get('/mypage', ensureAuthenticated, errorCatcher(async(req, res, next) => {
      res.render('home/mypage', { title: 'MyPage' });
    }));
    /* GET Freeboard page. */
@@ -32,4 +32,16 @@ router.get('/home', errorCatcher(async(req, res, next) => {
    router.get('/dips', errorCatcher(async(req, res, next) => {
      res.render('home/dips', { title: 'Dips' });
    }));
+
+
+// Access Control
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  } else {
+    req.flash('danger', 'Please login');
+    res.redirect('/users/login');
+  }
+}
+
 module.exports = router;
