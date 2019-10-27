@@ -13,14 +13,14 @@ block content
           #form-group
             label 카테고리
             select#sel1.form-control(name='category', value=article.category)
-              option 카테고리를 선택하세요
-              option 식자재
-              option 즉석식품
-              option 반찬
-              option 음료수/아이스크림
-              option 커피/차
-              option 해외직구
-              option 기타
+              option(value= article.category) 카테고리를 선택하세요
+              option(value="식자재") 식자재
+              option(value="즉석식품") 즉석식품
+              option(value="반찬") 반찬
+              option(value="음료수/아이스크림") 음료수/아이스크림
+              option(value="커피/차") 커피/차
+              option(value="해외직구") 해외직구
+              option(value="기타") 기타
           #form-group
             label 품목
             input.form-control(name='item', type='text', value=article.item)
@@ -33,7 +33,23 @@ block content
           //- // 사진 수정 추가해야함.
           #form-group
             label 모집 인원
-            input.form-control(name='members', value=article.members)
+            //- input.form-control(name='members', value=article.members)
+            select#sel1.form-control(name='members', type='text', value=article.members)
+              option(value= article.category) 모집할 인원을 선택하세요
+              option(value="2") 2
+              option(value="3") 3
+              option(value="4") 4
+              option(value="5") 5
+              option(value="6") 6
+              option(value="7") 7
+              option(value="8") 8
+              option(value="9") 9
+              option(value="10") 10
+              option(value="11") 11
+              option(value="12") 12
+              option(value="13") 13
+              option(value="14") 14
+              option(value="15") 15
           #form-group
             label 하고싶은 말
             textarea.form-control(name='comment', cols='30', rows='5')= article.comment
