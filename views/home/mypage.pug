@@ -31,33 +31,38 @@ block content
         
       .col-lg-8(style='margin-top:30px; padding-left:30px')
         h2(style='margin-bottom:30px') 마이페이지
-
-        table.table.table-borderless
-          thead
-          tbody
-          tr
-            td 아이디
-            td
-              input.form-control(type='text' placeholder=user.username readonly='')
-          tr
-            td 이름
-            td
-              input.form-control(type='text' value=user.name )
-          tr
-            td 비밀번호 변경
-            td
-              button.btn.btn-secondary(type='button' onclick="window.open('http://google.com')")
-                |비밀번호 변경
-          tr
-            td 전화번호
-            td
-              input.form-control(type='text' value=user.phone)
-          tr
-            td 주소
-            td
-              input.form-control(type='text' value=user.address)
-        button.btn.btn-primary(type='button' style='float:right; margin-left: 1.5rem; margin-right:1rem; width:5rem') 변경
-        button.btn.btn-warning(type='button' style='float:right;width:5rem') 초기화
+        form(method='POST', action='./users/edit/'+user._id)
+          table.table.table-borderless
+            thead
+            tbody
+            tr
+              td 아이디
+              td
+                input.form-control(type='text' placeholder=user.username readonly='')
+            tr
+              td 이름
+              td
+                input.form-control(name='name' type='text' value=user.name )
+            tr
+              td 이메일
+              td
+                input.form-control(name='email' type='text' value=user.email )
+            tr
+              td 비밀번호 변경
+              td
+                button.btn.btn-secondary(type='button' onclick="window.open('http://google.com')")
+                  |비밀번호 변경
+            tr
+              td 전화번호
+              td
+                input.form-control(name='phone' type='text' value=user.phone)
+            tr
+              td 주소
+              td
+                input.form-control(name='address' type='text' value=user.address)
+          //- button.btn.btn-primary(type='button' style='float:right; margin-left: 1.5rem; margin-right:1rem; width:5rem') Submit
+          input.btn.btn-primary(type='submit',value='Submit')
+        button.btn.btn-warning(type='button' style='float:right;width:5rem') Reset
 
 
       .col-lg-1(style='margin-top:50px;')

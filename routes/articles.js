@@ -36,7 +36,7 @@ router.get('/edit/:id', ensureAuthenticated, function(req, res){
 
   Article.findById(req.params.id, function(err, article){
     if(article.room_maker != req.user._id){
-      req.flash('danger', 'Not Authorized');
+      req.flash('danger', '잘못된 접근입니다!');
       return res.redirect('/');
     }
     res.render('edit_article', {
@@ -64,7 +64,7 @@ router.post('/edit/:id', function(req, res){
       console.log(err);
       return;
     } else {
-      req.flash('success', 'Article Updated');
+      req.flash('success', '방 정보가 수정되었습니다!');
       res.redirect('/');
     }
   });
@@ -126,7 +126,7 @@ function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated()){
     return next();
   } else {
-    req.flash('danger', 'Please login');
+    req.flash('danger', '로그인이 필요합니다!');
     res.redirect('/users/login');
   }
 }

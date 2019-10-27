@@ -87,4 +87,36 @@ router.get('/logout', function(req, res){
   res.redirect('/users/login');
 });
 
+// Load User Edit Form
+router.get('/edit/:id', function(req, res){
+
+  res.render('edit_user', {
+    title:'Edit User',
+    user:user
+  });
+  
+});
+
+// Update User Submit POST Route
+router.post('/edit/:id', function(req, res){
+
+  let user = {};
+  user.name = req.body.name;
+  user.email = req.body.email;
+  user.phone = req.body.phone;
+  user.address = req.body.address;
+
+  let query = {_id:req.params.id}
+
+  User.update(query, user, function(err){
+    if(err){
+      console.log(err);
+      return;
+    } else {
+      req.flash('success', '회원정보가 수정되었습니다!');
+      res.redirect('/');
+    }
+  });
+});
+
 module.exports = router;
