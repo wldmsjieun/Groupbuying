@@ -11,7 +11,7 @@ var schema = Schema({
   picture_url : {type:String},
   members : {type:String},
   comment : {type:String},//하고싶은 말
-  createdAt: {type: Date, default: Date.now},//개설날짜
+  startdate: {type:String},//개설날짜
 },{
   toJSON:{virtuals:true},
   toObject: {virtuals: true}

@@ -18,6 +18,7 @@ router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => 
   var name = req.file.filename;
   var new_post = new Article({
     room_maker : req.user._id,  // 개설자
+    startdate : req.body.startdate, // 시작날짜
     deadline : req.body.deadline, // 마감날짜
     category : req.body.category, // 카테고리
     item : req.body.item,         // 품목

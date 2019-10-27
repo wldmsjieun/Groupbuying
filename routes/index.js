@@ -28,21 +28,21 @@ router.get('/home', errorCatcher(async(req, res, next) => {
   }));
 
   
-   /* GET Mypage page. */
-   router.get('/mypage', ensureAuthenticated, errorCatcher(async(req, res, next) => {
-     res.render('home/mypage', { title: 'MyPage' });
-   }));
-   /* GET Freeboard page. */
-   router.get('/freeboard', errorCatcher(async(req, res, next) => {
-     res.render('home/freeboard', { title: 'Freeboard' });
-   }));
-   /* GET Basket page. */
-   router.get('/basket', errorCatcher(async(req, res, next) => {
-     res.render('home/basket', { title: 'Basket' });
-   }));
-   router.get('/dips', errorCatcher(async(req, res, next) => {
-     res.render('home/dips', { title: 'Dips' });
-   }));
+/* GET Mypage page. */
+router.get('/mypage', ensureAuthenticated, errorCatcher(async(req, res, next) => {
+  res.render('home/mypage', { title: 'MyPage' });
+}));
+/* GET Freeboard page. */
+router.get('/freeboard', errorCatcher(async(req, res, next) => {
+  res.render('home/freeboard', { title: 'Freeboard' });
+}));
+/* GET Basket page. */
+router.get('/basket', errorCatcher(async(req, res, next) => {
+  res.render('home/basket', { title: 'Basket' });
+}));
+router.get('/dips', errorCatcher(async(req, res, next) => {
+  res.render('home/dips', { title: 'Dips' });
+}));
 
 
    
