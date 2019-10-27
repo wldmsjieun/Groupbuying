@@ -1,0 +1,6 @@
+ul.list-group
+  h1
+    | 식자재
+  each article, i in articles
+    li.list-group-item
+      a(href='/articles/'+article._id)= article.title

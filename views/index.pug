@@ -5,7 +5,7 @@ block content
     .row
       .col-lg-3
         #login(style='margin-top:30px')
-          if user
+          if user 
             #user_index
               .row
                 .col-lg-5
@@ -19,7 +19,7 @@ block content
                   button.btn.btn-primary.btn-block(type="button", style='width:100%', onclick="location.href='./mypage'") 내정보
                 .col-lg-6
                   button.btn.btn-primary.btn-block(type="button" style=' width:100%' onclick="location.href='/users/logout'") 로그아웃
-          else
+          else 
             form(method='POST', action='/users/login', style='padding:5px')
               .form-group
                 input.form-control(name='username', type='text', placeholder='아이디')
@@ -32,14 +32,14 @@ block content
                 button(type="button" style='margin-left : 10px; width:115px;' onclick="location.href='/users/register'") 회원가입
         #category
           p(align='center' style='font-size:1rem') 카테고리
-          button.btn-ctg 식자재
+          button(type="button" onclick="location.href='food'").btn-ctg 식자재
           button.btn-ctg 즉석식품
           button.btn-ctg 반찬
           button.btn-ctg 음료수/아이스크림
           button.btn-ctg 커피/차
           button.btn-ctg 해외직구
           button.btn-ctg 기타
-      
+    
       // slide bar & banner-
       #cent-menu.col-lg-8
         ul.list-group
@@ -54,26 +54,26 @@ block content
 
         // /.row
 
-      .col-lg-1
-        nav.navbar(class='navbar-expand-xl|lg|md|sm')
-          ul.navbar-nav
-            #cur_item
-              h5(style='text-align:center') 최근목록
-                li.nav-item
-                  a.nav-link(href='#', style='color:black')
-                    img(src='images/potato.jpg')
-                    | 알감자
-                li.nav-item
-                  a.nav-link(href='#', style='color:black')
-                    img(src='images/fish.jpg')
-                    //-이 밑에 주석은 혹시 모르니까 남겨놔 주세요~ 
-                    //-img(src='picture/9437d3e417037c1b221518d08832782f')
-                    | 고등어
-                li.nav-item
-                  a.nav-link(href='#', style='color:black')
-                    img(src='images/pororo.jpg')
-                    | 뽀로로 인형
-                li.nav-item
-                  a.nav-link(href='#', style='color:black')
-                    img(src='images/knife.jpg')
-                    | 장미칼
+      //- .col-lg-1
+      //-   nav.navbar(class='navbar-expand-xl|lg|md|sm')
+      //-     ul.navbar-nav
+      //-       #cur_item
+      //-         h5(style='text-align:center') 최근목록
+      //-           li.nav-item
+      //-             a.nav-link(href='#', style='color:black')
+      //-               img(src='images/potato.jpg')
+      //-               | 알감자
+      //-           li.nav-item
+      //-             a.nav-link(href='#', style='color:black')
+      //-               img(src='images/fish.jpg')
+      //-               //-이 밑에 주석은 혹시 모르니까 남겨놔 주세요~ 
+      //-               //-img(src='picture/9437d3e417037c1b221518d08832782f')
+      //-               | 고등어
+      //-           li.nav-item
+      //-             a.nav-link(href='#', style='color:black')
+      //-               img(src='images/pororo.jpg')
+      //-               | 뽀로로 인형
+      //-           li.nav-item
+      //-             a.nav-link(href='#', style='color:black')
+      //-               img(src='images/knife.jpg')
+      //-               | 장미칼
