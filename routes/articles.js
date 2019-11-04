@@ -72,38 +72,33 @@ router.post('/edit/:id', function(req, res){
 });
 
 // Delete Article
-router.delete('/:id', function(req, res){
-  if(!req.user._id){
-    res.status(500).send();
-  }
+// router.get('/delete/:id', function(req, res){
+//   // if(!req.user._id){
+//   //   res.status(500).send();
+//   // }
 
-  let query = {_id:req.params.id}
+//   let query = {_id:req.params.id}
 
-  Article.findById(req.params.id, function(err, article){
-    if(article.room_maker != req.user._id){
-      res.status(500).send();
-    } else {
-      Article.remove(query, function(err){
-        if(err){
-          console.log(err);
-        }
-        res.send('Success');
-      });
-    }
-  });
-});
-
-// function authCheck(req, res){
-//   console.log("enter authCheck");
 //   Article.findById(req.params.id, function(err, article){
 //     if(article.room_maker != req.user._id){
-//       req.flash('danger', 'Not Authorized');
-//       return res.redirect('/');
-//     }else{
-//       res.redirect('../articles/edit/' + article.room_maker);
+//       res.status(500).send();
+//     } else {
+//       Article.remove(query, function(err){
+//         if(err){
+//           console.log(err);
+//         }
+//         res.send('Success');
+//       });
 //     }
 //   });
-// }
+// });
+
+
+router.get('/delete/:id', errorCatcher(async(req, res, next) =>{
+  await Article.findByIdAndDelete(req.params.id);
+  res.redirect('/');
+}));
+
 
 // Get Single Article
 router.get('/:id', function(req, res){
