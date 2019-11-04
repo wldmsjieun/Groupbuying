@@ -88,5 +88,5 @@ block content
                   td 모집 인원
                   td #{article.members}
         a.btn.btn-secondary(role='button' href='/articles/edit/'+article._id, style='width:5rem; margin-right:1rem') 수정
-        a.btn.btn-danger.delete-article(href='#',data-id=article._id, style='width:5rem') 삭제
+        a.btn.btn-danger.delete-article(href='/articles/delete/'+article._id, style='width:5rem') 삭제
   
