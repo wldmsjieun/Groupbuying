@@ -132,5 +132,10 @@ function ensureAuthenticated(req, res, next){
   }
 }
 
+   /* GET Mypage page. */
+   router.get('/mypage', ensureAuthenticated, errorCatcher(async(req, res, next) => {
+    res.render('home/mypage', { title: 'MyPage' });
+  }));
+
 
 module.exports = router;
