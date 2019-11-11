@@ -44,9 +44,7 @@ router.get('/dips', errorCatcher(async(req, res, next) => {
   res.render('home/dips', { title: 'Dips' });
 }));
 
-router.get('/test', errorCatcher(async(req, res, next) => {
-  res.render('test', { title: 'test' });
-}));
+
    
 // Access Control
 function ensureAuthenticated(req, res, next){
