@@ -11,16 +11,16 @@ router.get('/', errorCatcher (async(req, res,next) => {
     var articles = await Article.find();
     res.render('index', {title:'Articles',articles: articles});
 }));
-/* GET food page */
-router.get('/food', errorCatcher (async(req, res, next) => {
+/* GET grocery page */
+router.get('/grocery', errorCatcher (async(req, res, next) => {
     var category = await Article.find({category:'식자재'});
-    res.render('category/food', {title:'foods',articles: category});
+    res.render('category/grocery', {title:'foods',articles: category});
 }));
 //검색
 router.get('/search/:item', errorCatcher (async(req, res, next) => {
   const searchItem = req.quary.item;
   const item = await Article.find({item:`${searchItem}`});
-  res.render('category/food', {title:'foods',articles: item});
+  res.render('category/grocery', {title:'foods',articles: item});
 }));
 /* GET home page. */
 router.get('/home', errorCatcher(async(req, res, next) => {
@@ -44,7 +44,9 @@ router.get('/dips', errorCatcher(async(req, res, next) => {
   res.render('home/dips', { title: 'Dips' });
 }));
 
-
+router.get('/test', errorCatcher(async(req, res, next) => {
+  res.render('test', { title: 'test' });
+}));
    
 // Access Control
 function ensureAuthenticated(req, res, next){
