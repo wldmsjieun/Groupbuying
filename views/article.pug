@@ -18,6 +18,8 @@ extends layout
 //-       a.btn.btn-default(type='button' href='/articles/edit/'+article._id) 수정
 //-       a.btn.btn-danger.delete-article(href='#',data-id=article._id) 삭제
 block content
+  
+
   .container(style='margin-top: 100px')
     .row
       .col-lg-3
@@ -59,7 +61,8 @@ block content
       .col-lg-8
         .row(style='margin-top:50px')
           .col-lg-5
-            img(src= article.picture_url, alt='사진', width='80%')
+            -var pass=article._id+"@"+article.title+"@"+article.picture_url; 
+            img(src= article.picture_url, alt='사진', width='80%', onload="addThisItem('"+pass+"')")
             div(align='center' style="margin-top:1rem")
               h5 개설자가 전해주는 말
               p #{article.comment}
@@ -89,4 +92,12 @@ block content
                   td #{article.members}
         a.btn.btn-secondary(role='button' href='/articles/edit/'+article._id, style='width:5rem; margin-right:1rem') 수정
         a.btn.btn-danger.delete-article(href='/articles/delete/'+article._id, style='width:5rem') 삭제
-  
+    
+      .col-lg-1
+        //- p 최근목록
+        //- p#recentItems
+        nav.navbar(class='navbar-expand-xl|lg|md|sm')
+          ul.navbar-nav
+            #cur_item
+              h5(style='text-align:center') 최근목록
+                #recentItems

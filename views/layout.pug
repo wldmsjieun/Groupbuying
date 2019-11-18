@@ -4,6 +4,77 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
+    
+    //쿠키 설정을 위한 js스크립트
+    script.
+      function Queue(){
+        this.arr=init();
+
+        this.enqueue=enqueue;
+        this.dequeue =dequeue;
+        this.length=length;
+        this.isEmpty=isEmpty;
+        this.putData=putData;
+        this.init=init;
+      }
+      function init(){
+        var arr=[];
+        if(document.cookie!=''){
+          arr=document.cookie.split('|');
+          return arr; 
+        }
+          return arr;
+      }
+      function enqueue(item) {
+        this.arr.push(item);
+      }
+      function dequeue() {
+        return this.arr.shift();
+      }
+      function length(){ //현재 큐의 길이 리턴
+        return this.arr.length;
+      }
+      function isEmpty(){  //큐가 비어있는지 확인
+        return this.arr.length==0?true:false;
+      }
+      function putData(item){  //요소 삽입 시 최대길이 유지하도록 하는 함수. 데이터를 넣을 때 이 함수를 이용할 것.
+        var max_length=4;
+        this.enqueue(item);
+        if(this.arr.length>max_length){
+            this.dequeue();
+        }
+        var a=this.arr.join('|');  //arr을 문자열로 변환 "a|b|c|d"
+        document.cookie=a+";path=/";  //쿠키 설정
+      }
+
+      var recents=new Queue();  //최근목록을 저장할 Queue타입 전역변수
+
+      function addThisItem(itemID){ //최근목록에 아이템 넣는 함수
+        if(recents.arr.indexOf(itemID)==-1){  //최근리스트에 안들어있다면
+          recents.putData(itemID);  //itemID 삽입
+        }
+        else{ //추가하지 않고 순서 바꾸기
+          for(i=0;i<recents.length();i++){
+            if(recents.arr[i]==itemID){
+              recents.arr.splice(i,1);
+              recents.putData(itemID);
+            }
+          }
+        }
+      }
+
+      function recentViewedList(recentItems){
+        var content='';
+        var tmp;
+        var id,title,img;
+        for(i=recents.length()-1;i>=0;i--){
+          tmp =recents.arr[i].split('@');
+          id=tmp[0]; title=tmp[1]; img=tmp[2];
+          content+='<li class="nav-item"><a class="nav-link" href="/articles/'+id+'" style="color:black;"><img src="'+img+'"/><p>'+title+'</p></a></li>'
+        }
+        document.getElementById(recentItems).innerHTML=content;
+      }
+
   body
     include shared/_navbar.pug
     .container
