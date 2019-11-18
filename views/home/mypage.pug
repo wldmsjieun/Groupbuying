@@ -21,13 +21,13 @@ block content
                   button.btn.btn-primary.btn-block(type="button" style=' width:100%' onclick="location.href='/users/logout'") 로그아웃
         #category
           p(align='center' style='font-size:1rem') 카테고리
-          button.btn-ctg 식자재
-          button.btn-ctg 즉석식품
-          button.btn-ctg 반찬
-          button.btn-ctg 음료수/아이스크림
-          button.btn-ctg 커피/차
-          button.btn-ctg 해외직구
-          button.btn-ctg 기타
+          button(type="button" onclick="location.href='/grocery'").btn-ctg 식자재
+          button(type="button" onclick="location.href='/instant'").btn-ctg 즉석식품
+          button(type="button" onclick="location.href='/sidedish'").btn-ctg 반찬
+          button(type="button" onclick="location.href='/drinkNIcecream'").btn-ctg 음료수/아이스크림
+          button(type="button" onclick="location.href='/coffeeNTea'").btn-ctg 커피/차
+          button(type="button" onclick="location.href='/overseas'").btn-ctg 해외직구
+          button(type="button" onclick="location.href='/etc'").btn-ctg 기타
         
       .col-lg-8(style='margin-top:30px; padding-left:30px')
         h2(style='margin-bottom:30px') 마이페이지
