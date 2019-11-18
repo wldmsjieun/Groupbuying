@@ -8,7 +8,7 @@ html
     //쿠키 설정을 위한 js스크립트
     script.
       function Queue(){
-        this.arr=init();
+        this.arr=init();  //"itemID@itemTitle@itemImage"로 이루어짐
 
         this.enqueue=enqueue;
         this.dequeue =dequeue;
@@ -49,28 +49,34 @@ html
 
       var recents=new Queue();  //최근목록을 저장할 Queue타입 전역변수
 
-      function addThisItem(itemID){ //최근목록에 아이템 넣는 함수
-        if(recents.arr.indexOf(itemID)==-1){  //최근리스트에 안들어있다면
-          recents.putData(itemID);  //itemID 삽입
+      function addThisItem(item){ //최근목록에 아이템 넣는 함수
+        if(recents.arr.indexOf(item)==-1){  //최근리스트에 안들어있다면
+          recents.putData(item);  //itemID 삽입
         }
         else{ //추가하지 않고 순서 바꾸기
           for(i=0;i<recents.length();i++){
-            if(recents.arr[i]==itemID){
+            if(recents.arr[i]==item){
               recents.arr.splice(i,1);
-              recents.putData(itemID);
+              recents.putData(item);
             }
           }
         }
       }
 
-      function recentViewedList(recentItems){
-        var content='';
-        var tmp;
-        var id,title,img;
+      function recentViewedList(recentItems){ //최근 목록을 표시하는 함수. recents에 @로 구분되어 저장되어 있는 정보를 분할하여 출력한다
+        var content=''; //html에 표시할 내용
+        var tmp;  //id, title, img를 임시로 저장할 변수
+        var id,title,img; //각 상품의 정보
+        if(recents.isEmpty()==false){ //최근목록 없을 때 최근목록 칸이 안나오게 하기 위하여 작성함
+          content+='<nav class="navbar navbar-expand-xl|lg|md|sm"><ul class="navbar-nav"><div id="cur_item"><h5 style="text-align:center;">최근목록 </h5>'
+        }
         for(i=recents.length()-1;i>=0;i--){
           tmp =recents.arr[i].split('@');
           id=tmp[0]; title=tmp[1]; img=tmp[2];
           content+='<li class="nav-item"><a class="nav-link" href="/articles/'+id+'" style="color:black;"><img src="'+img+'"/><p>'+title+'</p></a></li>'
+        }
+        if(recents.isEmpty()==false){
+          content+='</div></ul></nav>'
         }
         document.getElementById(recentItems).innerHTML=content;
       }
