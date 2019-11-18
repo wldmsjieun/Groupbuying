@@ -45,21 +45,28 @@ block content
       // slide bar & banner-
       #cent-menu.col-lg-8
         .row
-          each article in articles
-            .col-lg-4(style='float:left; margin-bottom:20px')
-              .card.text-center(style="width:100%;height:23rem")
-                img.card-img-top(src=article.picture_url , alt='picture', style='height:60%')
-                .card-body
-                  h5.card-title
-                    a(href='/articles/'+article._id)=article.title
-                  p #{article.members} 명 모집            
-                  p #{article.deadline} 까지
-                
-
-        button.btn.btn-warning(type='button' style='float:right; width:5rem; margin-top:1rem; margin-right:1rem; margin-bottom:3rem' onclick="location.href='/articles/add'") 방 개설
-        
-
-
+          if data
+            each d in data
+              .col-lg-4(style='float:left; margin-bottom:20px')
+                .card.text-center(style="width:100%;height:23rem")
+                  img.card-img-top(src=d.picture_url , alt='picture', style='height:60%')
+                  .card-body
+                    h5.card-title
+                      a(href='/articles/'+d._id)=d.title
+                    p #{d.members} 명 모집            
+                    p #{d.deadline} 까지
+          else 
+            each article in articles
+              .col-lg-4(style='float:left; margin-bottom:20px')
+                .card.text-center(style="width:100%;height:23rem")
+                  img.card-img-top(src=article.picture_url , alt='picture', style='height:60%')
+                  .card-body
+                    h5.card-title
+                      a(href='/articles/'+article._id)=article.title
+                    p #{article.members} 명 모집            
+                    p #{article.deadline} 까지
+        button.btn.btn-warning(type='button' style='float:right; width:5rem; margin-top:1rem; margin-right:1rem; margin-bottom:3rem' onclick="location.href='/articles/add'") 방 개설     
+              
       .col-lg-1
         #recentItems
         //p 최근목록

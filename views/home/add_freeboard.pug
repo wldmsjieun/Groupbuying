@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+    .container(style='width: 1500px;margin-top: 120px' )
+      .row
+        .col-lg-offset-2
+        .col-lg-8
+        h3 #{title}
+        form(method='POST', action='/freeboard/write', enctype="multipart/form-data")
+          #form-group
+            label 제목
+            input.form-control(name='title', type='text', required)
+          #form-group
+            label 내용
+            textarea.form-control(name='contents', cols='100', rows='15', required)
+          br
+          input.btn.btn-primary(type='submit', value='글 쓰기', style='margin-bottom:5rem')

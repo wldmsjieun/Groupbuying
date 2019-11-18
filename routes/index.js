@@ -46,12 +46,8 @@ router.get('/etc', errorCatcher (async(req, res, next) => {
   var category = await Article.find({category:'기타'});
   res.render('category/etc', {title:'너 혼자 산다 - 기타',articles: category});
 }));
-//검색
-router.get('/search/:item', errorCatcher (async(req, res, next) => {
-  const searchItem = req.quary.item;
-  const item = await Article.find({item:`${searchItem}`});
-  res.render('category/grocery', {title:'foods',articles: item});
-}));
+
+
 /* GET home page. */
 router.get('/home', errorCatcher(async(req, res, next) => {
     res.render('/', { title: 'YouAloneLive' });

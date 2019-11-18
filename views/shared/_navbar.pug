@@ -18,12 +18,14 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-white.fixed-top
         li.nav-item.active
           a.nav-link(href='#' , style='margin-left:10px;')
     
-      form.form-inline(method='POST' action='search/:item')
-        input.form-control(type='text' placeholder='검색하실 내용을 입력하세요' style='width:25rem; height:3.2rem')
+      form.form-inline(method='GET' action=`/articles/search?item=${item}`)
+        input.form-control(type='text' name='item' placeholder='검색하실 내용을 입력하세요' style='width:25rem; height:3.2rem')
         button.btn.btn-light(type='submit' style='height:3.2rem;margin-right:8rem')
           img(src='https://image.flaticon.com/icons/svg/149/149852.svg' alt='search icon' width='25px')
+        
         select.custom-select(name='sorting')
           option(selected='') 정렬
           option(value='title') 제목순
           option(value='dday') 마감일순
           option(value='price') 가격순
+        

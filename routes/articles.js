@@ -7,11 +7,26 @@ const errorCatcher = require('../lib/async-error');
 const Article = require('../models/article');
 const User = require('../models/user');
 
+
+//검색
+router.get('/search', async(req, res, next) => {
+  const searchItem = req.query.item;
+  console.log(searchItem)
+  await Article.find({item : {$regex: searchItem}})
+    .then((result) =>{
+      
+      console.log(result)
+      res.render('index', {data: result})
+    }).catch((err) => {
+      console.log(err);
+    })
+  // const item = await Article.find({item:`${searchItem}`});
+  // res.render('category/grocery', {title:'foods',articles: item});
+});
+
 // Add Route
 router.get('/add', ensureAuthenticated, function(req, res){
-  res.render('add_article', {
-    title:'방 개설하기'
-  });
+  res.render('add_article', { title:'방 개설하기' });
 });
 
 router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => {
