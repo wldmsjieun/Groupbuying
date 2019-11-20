@@ -188,7 +188,7 @@ router.get('/join/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
 
      
     } else {
-      req.flash('danger', '방 개설자는 신청 불가!');
+      req.flash('danger', '방 개설자는 신청할 수 없습니다.');
       res.redirect('/');
     }
   })
