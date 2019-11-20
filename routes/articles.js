@@ -14,13 +14,18 @@ router.get('/search', async(req, res, next) => {
   // console.log(searchItem)
   await Article.find({item : {$regex: searchItem}})
     .then((result) =>{
-      // console.log(result)
-      res.render('index', {data: result})
+      console.log(result)
+      typeof(result)
+      // 검색 결과가 없으면 떠야하는데 이부분 일단 스킵.
+      if (result != null){
+        res.render('index', {data: result})
+      } else {
+        req.flash('danger', '검색 결과가 없습니다!');
+        res.redirect("/");
+      }
     }).catch((err) => {
       console.log(err);
     })
-  // const item = await Article.find({item:`${searchItem}`});
-  // res.render('category/grocery', {title:'foods',articles: item});
 });
 
 // Add Route
@@ -148,7 +153,7 @@ router.get('/:id', function(req, res){
   // authCheck(req, res);
 });
 
-router.get('/join/:id', errorCatcher(async(req, res, next) =>{
+router.get('/join/:id', ensureAuthenticated, errorCatcher(async(req, res, next) =>{
   Article.findById(req.params.id, function(err, article){
     console.log("here");
     console.log(req.user._id);
@@ -182,9 +187,13 @@ router.get('/join/:id', errorCatcher(async(req, res, next) =>{
       }
 
      
+    } else {
+      req.flash('danger', '방 개설자는 신청 불가!');
+      res.redirect('/');
     }
   })
 }));
+
 // Access Control
 function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated()){
