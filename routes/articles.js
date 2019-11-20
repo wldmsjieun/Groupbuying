@@ -11,11 +11,10 @@ const User = require('../models/user');
 //검색
 router.get('/search', async(req, res, next) => {
   const searchItem = req.query.item;
-  console.log(searchItem)
+  // console.log(searchItem)
   await Article.find({item : {$regex: searchItem}})
     .then((result) =>{
-      
-      console.log(result)
+      // console.log(result)
       res.render('index', {data: result})
     }).catch((err) => {
       console.log(err);
@@ -109,11 +108,26 @@ router.post('/edit/:id', function(req, res){
 // });
 
 
-router.get('/delete/:id', errorCatcher(async(req, res, next) =>{
-  await Article.findByIdAndDelete(req.params.id);
-  res.redirect('/');
-}));
+// router.post('/delete/:id', errorCatcher(async(req, res, next) =>{
+//   await Article.findByIdAndDelete(req.params.id);
+//   res.redirect('/');
+// }));
 
+router.get('/delete/:id', errorCatcher(async(req, res, next) =>{
+
+  Article.findById(req.params.id, function(err, article){
+    if(article.room_maker != req.user._id){
+      req.flash('danger', '잘못된 접근입니다!');
+      return res.redirect('/');
+    }
+    else{
+      console.log(req.params.id);
+      // Article.findByIdAndDelete(req.params.id);
+      article.remove();
+      res.redirect('/');
+    }
+  });
+}));
 
 // Get Single Article
 router.get('/:id', function(req, res){
