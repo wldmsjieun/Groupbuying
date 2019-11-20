@@ -63,6 +63,7 @@ block content
                     .card-body
                       h5.card-title
                         a(href='/articles/'+article._id)=article.title
+                      //현재 신청 인원 / 총 모집 인원 형식임
                       p #{article.current_member} / #{article.members} 명 모집
                       p #{article.deadline} 까지
         if !data
