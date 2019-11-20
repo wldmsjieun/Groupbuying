@@ -39,6 +39,7 @@ router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => 
     title : req.body.title,       // 방 제목
     members : req.body.members,   // 모집인원
     comment : req.body.comment,   // 하고싶은말
+    current_member : 1,
     picture_url : "/picture/" + name,  // 품목사진
   });
   await new_post.save();
@@ -71,6 +72,7 @@ router.post('/edit/:id', function(req, res){
   article.title = req.body.title;
   article.members = req.body.members;
   article.comment = req.body.comment;
+  article.current_member = req.body.current_member;
 
   let query = {_id:req.params.id}
 
@@ -108,7 +110,7 @@ router.post('/edit/:id', function(req, res){
 // });
 
 
-// router.post('/delete/:id', errorCatcher(async(req, res, next) =>{
+// router.get('/delete/:id', errorCatcher(async(req, res, next) =>{
 //   await Article.findByIdAndDelete(req.params.id);
 //   res.redirect('/');
 // }));
@@ -146,6 +148,43 @@ router.get('/:id', function(req, res){
   // authCheck(req, res);
 });
 
+router.get('/join/:id', errorCatcher(async(req, res, next) =>{
+  Article.findById(req.params.id, function(err, article){
+    console.log("here");
+    console.log(req.user._id);
+    
+    if(article.room_maker != req.user._id){
+      let record = {};
+      record.deadline = article.deadline;
+      record.category = article.category;
+      record.item = article.item;
+      record.title = article.title;
+      record.members = article.members;
+      record.comment = article.comment;
+      record.current_member = article.current_member + 1;
+      console.log(record);
+      let query = {_id:req.params.id}
+      var limit_num = parseInt(article.members);
+      console.log(limit_num);
+      if(limit_num < record.current_member){
+        req.flash('danger', '인원이 마감되었습니다!');
+        res.redirect('/');
+      }else{
+        Article.update(query, record, function(err){
+          if(err){
+            console.log(err);
+            return;
+          } else {
+            req.flash('success', '신청되었습니다!');
+            res.redirect('/');
+          }
+        });
+      }
+
+     
+    }
+  })
+}));
 // Access Control
 function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated()){

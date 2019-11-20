@@ -11,6 +11,7 @@ var schema = Schema({
   picture_url : {type:String},
   members : {type:String},
   comment : {type:String},//하고싶은 말
+  current_member : {type: Number},//
   startdate: {type:String},//개설날짜
 },{
   toJSON:{virtuals:true},
