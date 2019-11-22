@@ -7,6 +7,51 @@ const errorCatcher = require('../lib/async-error');
 const Article = require('../models/article');
 const User = require('../models/user');
 
+// INDEX 정렬 창 (마감기한)
+router.get('/sortpage', async(req, res, next) => {
+  await Article.find().sort({deadline : 1})
+    .then((result) =>{
+      console.log(result)
+      typeof(result)
+      if (result != null){
+        res.render('index', {data: result})
+      } else {
+        res.redirect("/");
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+});
+// INDEX 정렬 창 (최근등록)
+router.get('/sortpage1', async(req, res, next) => {
+  await Article.find().sort({startdate : 1})
+    .then((result) =>{
+      console.log(result)
+      typeof(result)
+      if (result != null){
+        res.render('index', {data: result})
+      } else {
+        res.redirect("/");
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+});
+// INDEX 정렬 창 (모집인원)
+router.get('/sortpage2', async(req, res, next) => {
+  await Article.find().sort({member : 1})
+    .then((result) =>{
+      console.log(result)
+      typeof(result)
+      if (result != null){
+        res.render('index', {data: result})
+      } else {
+        res.redirect("/");
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+});
 
 //검색
 router.get('/search', async(req, res, next) => {
@@ -157,7 +202,7 @@ router.get('/join/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
   Article.findById(req.params.id, function(err, article){
     console.log("here");
     console.log(req.user._id);
-    
+
     if(article.room_maker != req.user._id){
       let record = {};
       record.deadline = article.deadline;
@@ -186,7 +231,7 @@ router.get('/join/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
         });
       }
 
-     
+
     } else {
       req.flash('danger', '방 개설자는 신청할 수 없습니다.');
       res.redirect('/');
