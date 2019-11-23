@@ -22,6 +22,8 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-white.fixed-top
         input.form-control(type='text' name='item' placeholder='검색하실 내용을 입력하세요' style='width:25rem; height:3.2rem')
         button.btn.btn-light(type='submit' style='height:3.2rem;margin-right:8rem')
           img(src='https://image.flaticon.com/icons/svg/149/149852.svg' alt='search icon' width='25px')
-        button(type="button" style="float:left" onclick="location.href='/articles/sortpage'") 마감기한
-        button(type="button" style="float:'left' margin-left:'5px'" onclick="location.href='/articles/sortpage1'") 최근등록
-        button(type="button" style="float:'left' margin-left:'5px'" onclick="location.href='/articles/sortpage2'") 모집인원
+        select.custom-select(name='sorting', onchange="if(this.value) location.href=(this.value);")
+          option(selected='') 정렬
+          option(value='/articles/sortpage') 마감기한
+          option(value='/articles/sortpage1') 최근등록
+          option(value='/articles/sortpage2') 모집인원
