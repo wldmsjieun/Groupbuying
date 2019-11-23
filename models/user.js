@@ -25,7 +25,9 @@ const UserSchema = mongoose.Schema({
   address:{
     type: String,
     required: true
-  }
+  },
+  mydips: [new mongoose.Schema({item_id: String})]
+  
 });
 
 const User = module.exports = mongoose.model('User', UserSchema);

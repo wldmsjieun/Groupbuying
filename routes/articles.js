@@ -198,11 +198,14 @@ router.get('/:id', function(req, res){
   // authCheck(req, res);
 });
 
+// 신청하기 버튼을 눌렀을 때. 파라메터는 article._id가 넘어옴.
 router.get('/join/:id', ensureAuthenticated, errorCatcher(async(req, res, next) =>{
   Article.findById(req.params.id, function(err, article){
     console.log("here");
     console.log(req.user._id);
 
+    console.log("유저 아이디: " + req.user._id);
+    console.log("아이템 아이디: " + article._id);
     if(article.room_maker != req.user._id){
       let record = {};
       record.deadline = article.deadline;
@@ -230,12 +233,37 @@ router.get('/join/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
           }
         });
       }
-
-
     } else {
       req.flash('danger', '방 개설자는 신청할 수 없습니다.');
       res.redirect('/');
     }
+  })
+}));
+
+// 찜 버튼이 눌렸을 때. 마찬가지로 article._id가 넘어옴.
+router.get('/dips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) => {
+  let query = {_id:req.params.id}
+  console.log("아이템 아이디: " + query._id);
+  
+  Article.findById(req.params._id, function(err, article, user){
+    console.log("here");
+    console.log("유저 아이디: " + req.user._id);
+    let result = [];
+    result.mydips = query;
+    // user.mydips.push({item_id: query});
+    // user.mydips.item_id.push({item_id: query});
+    // user.item_id.push({item_id: query});
+    console.log(result);
+    User.update(query, result, function(err){
+      if(err){
+        console.log(err);
+        return;
+      } else {
+        this.mydips = result;
+        req.flash('success', '찜 목록에 추가되었습니다!');
+        res.redirect('/');
+      }
+    })
   })
 }));
 
