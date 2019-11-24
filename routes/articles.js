@@ -7,51 +7,95 @@ const errorCatcher = require('../lib/async-error');
 const Article = require('../models/article');
 const User = require('../models/user');
 
-// INDEX 정렬 창 (마감기한)
-router.get('/sortpage', async(req, res, next) => {
-  await Article.find().sort({deadline : 1})
+//// INDEX 정렬 창 (마감기한)
+router.get('/sort_deadline', async(req, res, next) => {
+  await Article.find()
     .then((result) =>{
-      console.log(result)
-      typeof(result)
-      if (result != null){
-        res.render('index', {data: result})
-      } else {
-        res.redirect("/");
-      }
-    }).catch((err) => {
-      console.log(err);
+      data_result = result;
+      // data_result = data_result.split('-');
     })
-});
+    function QuickSort(arr) { // 퀵 소트 함수이다. IF문에서 정렬하고자 하는 기준 설정(arr[i].뭐시기)
+      if(arr.length == 0 ) { return []; }
+      var middle = arr[0];
+      var len = arr.length;
+      var left = [], right = [];
+      for(var i = 1; i < len; ++i) {
+        if( Number(arr[i].deadline.replace(/-/gi,'')) < Number(middle.deadline.replace(/-/gi,'')) ) {
+          left.push(arr[i]); } // replace에서 xxxx-xx-xx 문자열에서 -를 지워줌.
+          else {
+            right.push(arr[i]);
+          }
+        }
+        return QuickSort(left).concat(middle, QuickSort(right));
+      }
+      let a=QuickSort(data_result);
+    if (a != null){
+      res.render('index', {data: a})
+    } else {
+      res.redirect("/");
+    }
+  });
+
 // INDEX 정렬 창 (최근등록)
-router.get('/sortpage1', async(req, res, next) => {
-  await Article.find().sort({startdate : 1})
+router.get('/sort_recent_enroll', async(req, res, next) => {
+  var data_result = [];
+  await Article.find()
     .then((result) =>{
-      console.log(result)
-      typeof(result)
-      if (result != null){
-        res.render('index', {data: result})
-      } else {
-        res.redirect("/");
-      }
-    }).catch((err) => {
-      console.log(err);
+      data_result = result;
+      // console.log(data_result);
     })
-});
+    function QuickSort(arr) { // 퀵 소트 함수이다. IF문에서 정렬하고자 하는 기준 설정(arr[i].뭐시기)
+      if(arr.length == 0 ) { return []; }
+      var middle = arr[0];
+      var len = arr.length;
+      var left = [], right = [];
+      for(var i = 1; i < len; ++i) {
+        if( Number(arr[i].startdate.replace(/-/gi,'')) > Number(middle.startdate.replace(/-/gi,'')) ) {
+          // console.log(arr[i].startdate);
+          left.push(arr[i]); } // replace에서 xxxx-xx-xx 문자열에서 -를 지워줌.
+          else {
+            right.push(arr[i]);
+          }
+        }
+        return QuickSort(left).concat(middle, QuickSort(right));
+      }
+      let a=QuickSort(data_result);
+    if (a != null){
+      res.render('index', {data: a})
+    } else {
+      res.redirect("/");
+    }
+  });
+
 // INDEX 정렬 창 (모집인원)
-router.get('/sortpage2', async(req, res, next) => {
-  await Article.find().sort({member : 1})
+router.get('/sort_pernum', async(req, res, next) => {
+  var data_result = [];
+  await Article.find()
     .then((result) =>{
-      console.log(result)
-      typeof(result)
-      if (result != null){
-        res.render('index', {data: result})
-      } else {
-        res.redirect("/");
-      }
-    }).catch((err) => {
-      console.log(err);
+      data_result = result;
     })
-});
+
+    function QuickSort(arr) { // 퀵 소트 함수이다. IF문에서 정렬하고자 하는 기준 설정(arr[i].뭐시기)
+      if(arr.length == 0 ) { return []; }
+      var middle = arr[0];
+      var len = arr.length;
+      var left = [], right = [];
+      for(var i = 1; i < len; ++i) {
+        if( Number(arr[i].members)-Number(arr[i].current_member) < Number(middle.members)-Number(middle.current_member) ) {
+          left.push(arr[i]); }    // replace에서 xxxx-xx-xx 문자열에서 -를 지워줌.
+          else {
+            right.push(arr[i]);
+          }
+        }
+        return QuickSort(left).concat(middle, QuickSort(right));
+      }
+      let a=QuickSort(data_result);
+    if (a != null){
+      res.render('index', {data: a})
+    } else {
+      res.redirect("/");
+    }
+  });
 
 //검색
 router.get('/search', async(req, res, next) => {
@@ -244,7 +288,7 @@ router.get('/join/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
 router.get('/dips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) => {
   let query = {_id:req.params.id}
   console.log("아이템 아이디: " + query._id);
-  
+
   Article.findById(req.params._id, function(err, article, user){
     console.log("here");
     console.log("유저 아이디: " + req.user._id);
