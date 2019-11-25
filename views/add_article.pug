@@ -8,8 +8,11 @@ block content
         h3 #{title}
         form(method='POST', action='/articles/add', enctype="multipart/form-data")
           #form-group
-            label 시작 날짜
-            input.form-control(name='startdate', type='date', min='2019-01-01' , required)
+            //-label 시작 날짜
+            input.form-control(name='startdate', type='date', min='2019-01-01' ,id='currentDate', style="display:none")
+            script.
+              document.getElementById('currentDate').value = new Date().toISOString().substring(0, 10);;
+
           #form-group
             label 모집 마감일
             input.form-control(name='deadline', type='date',min='2019-01-01' , required)

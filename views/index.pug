@@ -49,7 +49,8 @@ block content
             each d in data
               .col-lg-4(style='float:left; margin-bottom:20px')
                 .card.text-center(style="width:100%;height:25rem")
-                  img.card-img-top(src=d.picture_url , alt='picture', style='height:60%')
+                  a(href='/articles/'+d._id, style='height:60%')
+                      img.card-img-top(src=d.picture_url , alt='picture',style='height:100%')
                   .card-body
                     h5.card-title
                       a(href='/articles/'+d._id)=d.title
@@ -59,7 +60,8 @@ block content
             each article in articles
                 .col-lg-4(style='float:left; margin-bottom:20px')
                   .card.text-center(style="width:100%;height:25rem")
-                    img.card-img-top(src=article.picture_url , alt='picture', style='height:60%')
+                    a(href='/articles/'+article._id, style='height:60%')
+                      img.card-img-top(src=article.picture_url , alt='picture',style='height:100%')
                     .card-body
                       h5.card-title
                         a(href='/articles/'+article._id)=article.title
