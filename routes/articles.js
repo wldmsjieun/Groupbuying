@@ -166,7 +166,7 @@ router.post('/edit/:id', function(req, res){
   article.title = req.body.title;
   article.members = req.body.members;
   article.comment = req.body.comment;
-  article.current_member = req.body.current_member;
+  //article.current_member = req.body.current_member; //신청인원이라 바꿀필요 없음
 
   let query = {_id:req.params.id}
 
