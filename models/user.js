@@ -26,7 +26,9 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  mydips: [new mongoose.Schema({item_id: String})]
+  mydips: [new mongoose.Schema({item_id: String})],
+  item_List:[mongoose.Schema.Types.Mixed],
+  item_count : {type : Number}
   
 });
 

@@ -6,96 +6,54 @@ const errorCatcher = require('../lib/async-error');
 
 const Article = require('../models/article');
 const User = require('../models/user');
-
-//// INDEX 정렬 창 (마감기한)
-router.get('/sort_deadline', async(req, res, next) => {
-  await Article.find()
+var mem = new Array();
+var MAXBUF = 512;
+var basket = new Array();
+// INDEX 정렬 창 (마감기한)
+router.get('/sortpage', async(req, res, next) => {
+  await Article.find().sort({deadline : 1})
     .then((result) =>{
-      data_result = result;
-      // data_result = data_result.split('-');
-    })
-    function QuickSort(arr) { // 퀵 소트 함수이다. IF문에서 정렬하고자 하는 기준 설정(arr[i].뭐시기)
-      if(arr.length == 0 ) { return []; }
-      var middle = arr[0];
-      var len = arr.length;
-      var left = [], right = [];
-      for(var i = 1; i < len; ++i) {
-        if( Number(arr[i].deadline.replace(/-/gi,'')) < Number(middle.deadline.replace(/-/gi,'')) ) {
-          left.push(arr[i]); } // replace에서 xxxx-xx-xx 문자열에서 -를 지워줌.
-          else {
-            right.push(arr[i]);
-          }
-        }
-        return QuickSort(left).concat(middle, QuickSort(right));
+      console.log(result)
+      typeof(result)
+      if (result != null){
+        res.render('index', {data: result})
+      } else {
+        res.redirect("/");
       }
-      let a=QuickSort(data_result);
-    if (a != null){
-      res.render('index', {data: a})
-    } else {
-      res.redirect("/");
-    }
-  });
-
+    }).catch((err) => {
+      console.log(err);
+    })
+});
 // INDEX 정렬 창 (최근등록)
-router.get('/sort_recent_enroll', async(req, res, next) => {
-  var data_result = [];
-  await Article.find()
+router.get('/sortpage1', async(req, res, next) => {
+  await Article.find().sort({startdate : 1})
     .then((result) =>{
-      data_result = result;
-      // console.log(data_result);
-    })
-    function QuickSort(arr) { // 퀵 소트 함수이다. IF문에서 정렬하고자 하는 기준 설정(arr[i].뭐시기)
-      if(arr.length == 0 ) { return []; }
-      var middle = arr[0];
-      var len = arr.length;
-      var left = [], right = [];
-      for(var i = 1; i < len; ++i) {
-        if( Number(arr[i].startdate.replace(/-/gi,'')) > Number(middle.startdate.replace(/-/gi,'')) ) {
-          // console.log(arr[i].startdate);
-          left.push(arr[i]); } // replace에서 xxxx-xx-xx 문자열에서 -를 지워줌.
-          else {
-            right.push(arr[i]);
-          }
-        }
-        return QuickSort(left).concat(middle, QuickSort(right));
+      console.log(result)
+      typeof(result)
+      if (result != null){
+        res.render('index', {data: result})
+      } else {
+        res.redirect("/");
       }
-      let a=QuickSort(data_result);
-    if (a != null){
-      res.render('index', {data: a})
-    } else {
-      res.redirect("/");
-    }
-  });
-
+    }).catch((err) => {
+      console.log(err);
+    })
+});
 // INDEX 정렬 창 (모집인원)
-router.get('/sort_pernum', async(req, res, next) => {
-  var data_result = [];
-  await Article.find()
+router.get('/sortpage2', async(req, res, next) => {
+  await Article.find().sort({member : 1})
     .then((result) =>{
-      data_result = result;
-    })
-
-    function QuickSort(arr) { // 퀵 소트 함수이다. IF문에서 정렬하고자 하는 기준 설정(arr[i].뭐시기)
-      if(arr.length == 0 ) { return []; }
-      var middle = arr[0];
-      var len = arr.length;
-      var left = [], right = [];
-      for(var i = 1; i < len; ++i) {
-        if( Number(arr[i].members)-Number(arr[i].current_member) < Number(middle.members)-Number(middle.current_member) ) {
-          left.push(arr[i]); }    // replace에서 xxxx-xx-xx 문자열에서 -를 지워줌.
-          else {
-            right.push(arr[i]);
-          }
-        }
-        return QuickSort(left).concat(middle, QuickSort(right));
+      console.log(result)
+      typeof(result)
+      if (result != null){
+        res.render('index', {data: result})
+      } else {
+        res.redirect("/");
       }
-      let a=QuickSort(data_result);
-    if (a != null){
-      res.render('index', {data: a})
-    } else {
-      res.redirect("/");
-    }
-  });
+    }).catch((err) => {
+      console.log(err);
+    })
+});
 
 //검색
 router.get('/search', async(req, res, next) => {
@@ -124,8 +82,9 @@ router.get('/add', ensureAuthenticated, function(req, res){
 
 router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => {
   var name = req.file.filename;
+  var uid =req.user._id;
   var new_post = new Article({
-    room_maker : req.user._id,  // 개설자
+    room_maker : uid,  // 개설자
     startdate : req.body.startdate, // 시작날짜
     deadline : req.body.deadline, // 마감날짜
     category : req.body.category, // 카테고리
@@ -135,9 +94,15 @@ router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => 
     comment : req.body.comment,   // 하고싶은말
     current_member : 1,
     picture_url : "/picture/" + name,  // 품목사진
+ 
   });
+  
+  mem[0] = req.user._id;
+  new_post.mem_List = mem[0];
+  console.log(mem);
+  console.log(new_post.mem_List);
+  console.log(typeof(mem));
   await new_post.save();
-
   res.redirect("/");
 }));
 
@@ -181,33 +146,6 @@ router.post('/edit/:id', function(req, res){
   });
 });
 
-// Delete Article
-// router.get('/delete/:id', function(req, res){
-//   // if(!req.user._id){
-//   //   res.status(500).send();
-//   // }
-
-//   let query = {_id:req.params.id}
-
-//   Article.findById(req.params.id, function(err, article){
-//     if(article.room_maker != req.user._id){
-//       res.status(500).send();
-//     } else {
-//       Article.remove(query, function(err){
-//         if(err){
-//           console.log(err);
-//         }
-//         res.send('Success');
-//       });
-//     }
-//   });
-// });
-
-
-// router.get('/delete/:id', errorCatcher(async(req, res, next) =>{
-//   await Article.findByIdAndDelete(req.params.id);
-//   res.redirect('/');
-// }));
 
 router.get('/delete/:id', errorCatcher(async(req, res, next) =>{
 
@@ -218,7 +156,6 @@ router.get('/delete/:id', errorCatcher(async(req, res, next) =>{
     }
     else{
       console.log(req.params.id);
-      // Article.findByIdAndDelete(req.params.id);
       article.remove();
       res.redirect('/');
     }
@@ -229,75 +166,100 @@ router.get('/delete/:id', errorCatcher(async(req, res, next) =>{
 router.get('/:id', function(req, res){
   Article.findById(req.params.id, function(err, article){
     User.findById(article.room_maker, function(err, user){
-      // console.log(req.params.id);
-      // console.log(article.room_maker);
-      // console.log(article);
+    
       res.render('article', {
         article:article,
         author: user.name
       });
     });
   });
-  // console.log("i'm going authCheck");
-  // authCheck(req, res);
+
 });
 
 // 신청하기 버튼을 눌렀을 때. 파라메터는 article._id가 넘어옴.
-router.get('/join/:id', ensureAuthenticated, errorCatcher(async(req, res, next) =>{
-  Article.findById(req.params.id, function(err, article){
-    console.log("here");
-    console.log(req.user._id);
+router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatcher(async(req, res, next) =>{
+  
+  // User.findById(req.params.id, function(err, joinUser){
+  //   console.log("joinUser req.params.id");
+  //   console.log(req.params.id);
+  
 
-    console.log("유저 아이디: " + req.user._id);
-    console.log("아이템 아이디: " + article._id);
-    if(article.room_maker != req.user._id){
-      let record = {};
-      record.deadline = article.deadline;
-      record.category = article.category;
-      record.item = article.item;
-      record.title = article.title;
-      record.members = article.members;
-      record.comment = article.comment;
-      record.current_member = article.current_member + 1;
-      console.log(record);
-      let query = {_id:req.params.id}
-      var limit_num = parseInt(article.members);
-      console.log(limit_num);
-      if(limit_num < record.current_member){
-        req.flash('danger', '인원이 마감되었습니다!');
-        res.redirect('/');
-      }else{
-        Article.update(query, record, function(err){
-          if(err){
-            console.log(err);
-            return;
-          } else {
-            req.flash('success', '신청되었습니다!');
-            res.redirect('/');
+    Article.findById(req.params.id, function(err, article){
+      
+      if(article.room_maker != req.user._id){
+        let record = {};
+        record.deadline = article.deadline;
+        record.category = article.category;
+        record.item = article.item;
+        record.title = article.title;
+        record.members = article.members;
+        record.comment = article.comment;
+        record.current_member = article.current_member+1;
+      
+
+        let query = {_id:req.params.id}
+        var limit_num = parseInt(article.members);
+        mem = article.mem_List;
+      
+        var index = article.current_member;
+      
+        var str =  new String();
+
+        for(var i=0; i < index; i++){
+          console.log(mem.indexOf(req.user._id));
+          
+          if(mem.indexOf(req.user._id) == -1){
+            mem[index] = req.user._id;
+            console.log("article req.params.id");
+            // console.log(req.params.id);
+            // joinUser.basket.push(req.params.id);
+            // basket.push(req.params.id);
+            break;
+          }else{
+            req.flash('danger', '이미 신청하신 상품입니다!');
+            return res.redirect('/');
           }
-        });
+        }
+
+
+        if(limit_num < record.current_member){
+          req.flash('danger', '인원이 마감되었습니다!');
+          res.redirect('/');
+        }else{
+        
+          record.mem_List = mem;
+          
+          console.log("///////////////////////////////////");
+            Article.update(query, record, function(err){
+              if(err){
+                console.log(err);
+                return;
+              } else {
+                req.flash('success', '신청되었습니다!');
+                res.redirect('/');
+              }
+            });
+          
+        }
+      } else {
+        req.flash('danger', '방 개설자는 신청할 수 없습니다.');
+        res.redirect('/');
       }
-    } else {
-      req.flash('danger', '방 개설자는 신청할 수 없습니다.');
-      res.redirect('/');
-    }
-  })
+    })
+
+  // })
 }));
 
 // 찜 버튼이 눌렸을 때. 마찬가지로 article._id가 넘어옴.
 router.get('/dips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) => {
   let query = {_id:req.params.id}
-  console.log("아이템 아이디: " + query._id);
-
+  // console.log("아이템 아이디: " + query._id);
+  
   Article.findById(req.params._id, function(err, article, user){
-    console.log("here");
-    console.log("유저 아이디: " + req.user._id);
+    // console.log("here");
+    // console.log("유저 아이디: " + req.user._id);
     let result = [];
     result.mydips = query;
-    // user.mydips.push({item_id: query});
-    // user.mydips.item_id.push({item_id: query});
-    // user.item_id.push({item_id: query});
-    console.log(result);
     User.update(query, result, function(err){
       if(err){
         console.log(err);
