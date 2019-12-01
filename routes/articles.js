@@ -8,7 +8,21 @@ const Article = require('../models/article');
 const User = require('../models/user');
 var mem = new Array();
 var MAXBUF = 512;
-var basket = new Array();
+var dips = new Array();
+
+// 자신의 찜 목록을 확인하는 부분이다.
+router.get('/mydips', ensureAuthenticated, async(req,res,next) => {
+  let userid = req.user._id;
+  console.log(userid);
+  await User.findById(userid, function(user, err){
+    result = {};
+    result.name = req.user.name;
+    result.mydips = req.user.dips;
+    console.log(result);
+  }).then((result) => {
+    console.log(result);
+  })
+})
 // INDEX 정렬 창 (마감기한)
 router.get('/sort_deadline', async(req, res, next) => {
   await Article.find()
@@ -225,7 +239,7 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
   
 
     Article.findById(req.params.id, function(err, article){
-      
+      console.log(req.params.id);
       if(article.room_maker != req.user._id){
         let record = {};
         record.deadline = article.deadline;
@@ -238,9 +252,10 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
       
 
         let query = {_id:req.params.id}
+        console.log(query);
         var limit_num = parseInt(article.members);
         mem = article.mem_List;
-      
+        console.log(mem);
         var index = article.current_member;
       
         var str =  new String();
@@ -292,23 +307,53 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
 
 // 찜 버튼이 눌렸을 때. 마찬가지로 article._id가 넘어옴.
 router.get('/dips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) => {
-  console.log("here");
-  let item_query = {_id:req.params.id}
-  let user_query = {_id:req.user._id}
-  console.log("아이템 아이디: " + item_query._id);
-  console.log("유저 아이디: "+ user_query)
-  let result = {};
-  result.item_id = item_query._id;
-  User.findOneAndUpdate(user_query, {$push: {mydips: result}}, {upsert:true, 'new':true}, function(err){
-      if(err){
+  Article.findById(req.params.id, function(err, article){
+    if(article.room_maker != req.user._id){
+      let item_query = req.params.id
+      let user_query = {_id:req.user.id} 
+      const update = {
+        "$addToSet": {
+          "mydips": item_query
+        }
+      };
+      const options = { 
+        upsert: true,
+        new: true
+      };
+      
+      User.findOneAndUpdate(user_query, update, options)
+      .then(result => {
+        // console.log(user_query);
+        User.findById(user_query, function(user, err){
+          dips = req.user.mydips;  // 신청하기 전에 유저의 찜 목록을 배열에 저장.
+          console.log("신청하기 전의 dips 배열 : " + dips);
+        }).then(result => {
+          for(let i=0; i<dips.length; i++){
+            if (dips.indexOf(item_query) == -1){
+              req.flash('success', '찜 목록에 추가되었습니다!');
+              console.log("신청한 후 dips 배열 : " + dips.mydips);
+              return res.redirect('/');    
+            } else {
+              req.flash('danger', '중복 신청입니다!');
+              return res.redirect('/');    
+            }
+          }
+        }).catch((err) => {
+          console.log(err);
+          req.flash('danger', 'DB err!');
+          return res.redirect('/');
+        })
+      }).catch((err) => {
         console.log(err);
-        return;
-      } else {
-        req.flash('success', '찜 목록에 추가되었습니다!');
-        res.redirect('/');
-      }
-    })
-}));
+        req.flash('danger', 'DB err!');
+        return res.redirect('/');
+      })
+    } else {
+      req.flash('danger', '개설자는 찜을 할 수 없습니다!');
+      return res.redirect('/');
+    }
+  }
+)}));
 
 // Access Control
 function ensureAuthenticated(req, res, next){
