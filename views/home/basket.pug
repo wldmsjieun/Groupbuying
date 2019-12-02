@@ -1,13 +1,36 @@
 extends ../layout
 
 block content
-    p
-    p
-    p
-    p
-    h1 같이 살까
-    p 같이 살까
-    #cent-menu.col-lg-8
+  .container(style='margin-top: 100px')  
+    .row
+      .col-lg-3
+        #login(style='margin-top:30px')
+          if user
+            #user_index
+              .row
+                .col-lg-5
+                  img(src='../image/smile.png', width='100px', style="margin-left:5px;margin-top:5px")
+                .col-lg-7(style='margin-top:25px')
+                  p(style='line-height:0%') 
+                    b #{user.name} 님,
+                  | 환영합니다!
+                  p(style='margin-top:15px') 알림(0)
+              .row(style="padding-top:20px")
+                .col-lg-6
+                  button.btn.btn-primary.btn-block(type="button", style='width:100%', onclick="location.href='./mypage'") 내정보
+                .col-lg-6
+                  button.btn.btn-primary.btn-block(type="button" style=' width:100%' onclick="location.href='/users/logout'") 로그아웃
+        #category
+          p(align='center' style='font-size:1rem') 카테고리
+          button(type="button" onclick="location.href='/grocery'").btn-ctg 식자재
+          button(type="button" onclick="location.href='/instant'").btn-ctg 즉석식품
+          button(type="button" onclick="location.href='/sidedish'").btn-ctg 반찬
+          button(type="button" onclick="location.href='/drinkNIcecream'").btn-ctg 음료수/아이스크림
+          button(type="button" onclick="location.href='/coffeeNTea'").btn-ctg 커피/차
+          button(type="button" onclick="location.href='/overseas'").btn-ctg 해외직구
+          button(type="button" onclick="location.href='/etc'").btn-ctg 기타
+      #cent-menu.col-lg-8(style='margin-top:30px; padding-left:30px')
+        h2(style='margin-bottom:30px') 같이 살까?
         .row
           if data
             each d in data
@@ -21,7 +44,6 @@ block content
                     p #{d.current_member} / #{d.members} 명 모집      
                     p #{d.deadline} 까지
             else
-              p
-               h1 같이 살까 목록이 비어있습니다!
-    //-   .col-lg-1
-    //-       #recentItems
+              h5(style="margin-left:auto; margin-right:auto") 신청하신 목록이 없습니다.
+      .col-lg-1
+        #recentItems
