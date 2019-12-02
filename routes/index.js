@@ -5,6 +5,7 @@ const errorCatcher = require('../lib/async-error');
 // Article Model // User Model
 const Article = require('../models/article');
 const User = require('../models/user');
+const Freeboard = require('../models/freeboard');
 
 // Add Route
 router.get('/', errorCatcher (async(req, res,next) => {
@@ -53,14 +54,15 @@ router.get('/home', errorCatcher(async(req, res, next) => {
     res.render('/', { title: 'YouAloneLive' });
   }));
 
-  
+
 /* GET Mypage page. */
 router.get('/mypage', ensureAuthenticated, errorCatcher(async(req, res, next) => {
   res.render('home/mypage', { title: 'MyPage' });
 }));
 /* GET Freeboard page. */
 router.get('/freeboard', errorCatcher(async(req, res, next) => {
-  res.render('home/freeboard', { title: 'Freeboard' });
+  var freeboards = await Freeboard.find()
+  res.render('home/freeboard_list', { title: 'Freeboard', freeboards: freeboards  });
 }));
 /* GET Basket page. */
 // router.get('/basket', errorCatcher(async(req, res, next) => {
@@ -71,7 +73,7 @@ router.get('/freeboard', errorCatcher(async(req, res, next) => {
 // }));
 
 
-   
+
 // Access Control
 function ensureAuthenticated(req, res, next){
   if(req.isAuthenticated()){

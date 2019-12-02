@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  .container(style='margin-top: 150px')
+    .row
+      h4 게시판
+      table.table.table-striped
+        thead
+          tr
+            th(width ="90") 날짜
+            th(width ="80") 작성자
+            th(width ="100") 제목
+            th(width ="200") 내용
+        tbody
+          each freeboard in freeboards
+            tr
+              td  #{freeboard.date}
+              td  #{freeboard.author}
+              td
+                a(href='/freeboards/'+freeboard._id)=freeboard.title
+              td
+                a(href='/freeboards/'+freeboard._id)=freeboard.contents
+
+      script(src='js/jquery-3.1.1.js')
+      script(src='js/bootstrap.min.js')
+      .row
+        button.btn.btn-warning(type='button' style='margin-left: 1050px;' onclick="location.href='/freeboards/add'") 글쓰기

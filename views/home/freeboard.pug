@@ -1,15 +1,21 @@
 extends ../layout
 
 block content
-    p
-    p
-    h1 freeboard(자유게시판)
-    p freeboard(자유게시판)
-    div
-      table
-        tr
-          th 번호
-          th 제목
-          th 작성자
-          th 날짜
-          th 조회수
+    .container(style='width: 1500px;margin-top: 150px;margin-left:150px;font-size:20px' )
+      .row
+        .col-lg-offset-2
+        .col-lg-8
+          h3 제목
+          hr
+          p #{freeboard.title}
+          hr
+          br
+          br
+          br
+      .row(margin-top:'100px')
+        .col-lg-offset-2
+        .col-lg-8
+          h3 내용
+          hr
+          p #{freeboard.contents}
+          hr
