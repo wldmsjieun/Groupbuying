@@ -41,7 +41,7 @@ router.post('/adds',errorCatcher(async(req,res,next) => {
   var date1 = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+(d.getDay()+1);
   var new_post = new Freeboard({
     board_maker : req.user._id,
-    author : req.user.name,  // 개설자
+    author : req.user.username,  // 개설자
     title : req.body.title, // 제목
     contents : req.body.contents, // 내용
     date : date1,   // 등록날짜

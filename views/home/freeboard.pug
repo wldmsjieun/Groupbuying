@@ -1,21 +1,17 @@
-extends ../layout
+extend ../layout
 
 block content
-    .container(style='width: 1500px;margin-top: 150px;margin-left:150px;font-size:20px' )
+    .container(style='width: 1500px;margin-top: 150px;margin-left:150px;' )
       .row
         .col-lg-offset-2
         .col-lg-8
-          h3 제목
-          hr
-          p #{freeboard.title}
-          hr
+          h4 #{freeboard.title}
+          p(style="float:right; margin-left:3rem") #{freeboard.author}
+          p(style="float:right;") #{freeboard.date}
           br
-          br
+          hr
           br
       .row(margin-top:'100px')
         .col-lg-offset-2
         .col-lg-8
-          h3 내용
-          hr
           p #{freeboard.contents}
-          hr
