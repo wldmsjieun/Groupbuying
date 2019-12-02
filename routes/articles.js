@@ -10,19 +10,6 @@ var mem = new Array();
 var MAXBUF = 512;
 var dips = new Array();
 
-// 자신의 찜 목록을 확인하는 부분이다.
-router.get('/mydips', ensureAuthenticated, async(req,res,next) => {
-  let userid = req.user._id;
-  console.log(userid);
-  await User.findById(userid, function(user, err){
-    result = {};
-    result.name = req.user.name;
-    result.mydips = req.user.dips;
-    console.log(result);
-  }).then((result) => {
-    console.log(result);
-  })
-})
 // INDEX 정렬 창 (마감기한)
 router.get('/sort_deadline', async(req, res, next) => {
   await Article.find()
@@ -115,8 +102,8 @@ router.get('/search', async(req, res, next) => {
   // console.log(searchItem)
   await Article.find({item : {$regex: searchItem}})
     .then((result) =>{
-      console.log(result)
-      typeof(result)
+      console.log(result);
+      typeof(result);
       // 검색 결과가 없으면 떠야하는데 이부분 일단 스킵.
       if (result != null){
         res.render('index', {data: result})
@@ -128,6 +115,28 @@ router.get('/search', async(req, res, next) => {
       console.log(err);
     })
 });
+
+// 자신의 찜 목록을 확인하는 부분이다.
+router.get('/mydips', ensureAuthenticated, async(req,res,next) => {
+  let userid = req.user._id;
+  let record = {}; // 자신의 찜 목록 배열이 들어가는 객체
+  let MyDipsResult = {};
+  console.log("현 유저의 아이디 : " + userid);
+  // 현 유저의 아이디로 찜 한 목록의 배열을 가지고온다.
+  User.findById(userid, function(user, err){
+  }).then((record) => {
+    let query = {};
+    query = record.mydips;
+    console.log(typeof(query));
+    Article.find({_id: query}, function(err,article){
+    }).then((result) => {
+      res.render('home/mydips', {data: result})
+    }).catch((err) => {
+      console.log(err);
+    })
+  })
+  
+})
 
 // Add Route
 router.get('/add', ensureAuthenticated, function(req, res){
@@ -331,7 +340,7 @@ router.get('/dips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
           for(let i=0; i<dips.length; i++){
             if (dips.indexOf(item_query) == -1){
               req.flash('success', '찜 목록에 추가되었습니다!');
-              console.log("신청한 후 dips 배열 : " + dips.mydips);
+              console.log("신청한 후 dips 배열 : " + dips);
               return res.redirect('/');    
             } else {
               req.flash('danger', '중복 신청입니다!');
@@ -354,6 +363,8 @@ router.get('/dips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
     }
   }
 )}));
+
+
 
 // Access Control
 function ensureAuthenticated(req, res, next){

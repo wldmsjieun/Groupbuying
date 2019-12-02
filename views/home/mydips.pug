@@ -5,3 +5,20 @@ block content
     p
     h1 dips (찜)
     p dips(찜)
+
+    #cent-menu.col-lg-8
+        .row
+          if data
+            each d in data
+              .col-lg-4(style='float:left; margin-bottom:20px')
+                .card.text-center(style="width:100%;height:25rem")
+                  a(href='../articles/'+d._id, style='height:60%')
+                      img.card-img-top(src=d.picture_url , alt='picture',style='height:100%')
+                  .card-body
+                    h5.card-title
+                      a(href='../articles/'+d._id)=d.title
+                    p #{d.current_member} / #{d.members} 명 모집      
+                    p #{d.deadline} 까지
+            else
+              p
+               h1 찜 목록이 비어있습니다!
