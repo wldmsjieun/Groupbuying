@@ -262,24 +262,12 @@ router.get('/:id', function(req, res){
 
 // 신청하기 버튼을 눌렀을 때. 파라메터는 article._id가 넘어옴.
 router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatcher(async(req, res, next) =>{
-  // var joinmem = User.findById(req.params.id, function(err, joinUser){ });
   var joinmem = await User.findOne({item_List : req.user.item_List});
-  // console.log(joinmem);
-  // User.findById(req.params.id, function(err, joinUser){  
     Article.findById(req.params.id, function(err, article){
 
       let info = {};
-      info.name = joinmem.name;
-      info.email = joinmem.email;
-      info.username = joinmem.username;
-      info.password = joinmem.password;
-      info.phone = joinmem.phone;
-      info.address = joinmem.address;
-      info.mydips = joinmem.mydips;
-      info.item_count = joinmem.item_count;
       info.item_List = joinmem.item_List;
-      
-      // console.log(info);
+    
 
       if(article.room_maker != req.user._id){
         let record = {};
@@ -301,9 +289,7 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
 
 
         basket =joinmem.item_List;
-        console.log(basket);
-  
-        
+       
         let user_query = {_id:req.user._id};
        
         for(var i=0; i < index; i++){
@@ -311,10 +297,7 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
           if(mem.indexOf(req.user._id) == -1){
             // mem[index]의 user._id삽입
             mem[index] = req.user._id;
-            console.log(item_index);
-           
             basket[item_index] = req.params.id;
-            console.log(basket);
             item_index++;
             break;
           }else{
