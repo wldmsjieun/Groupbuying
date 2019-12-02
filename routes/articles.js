@@ -7,9 +7,8 @@ const errorCatcher = require('../lib/async-error');
 const Article = require('../models/article');
 const User = require('../models/user');
 var mem = new Array();
-var MAXBUF = 512;
-var dips = new Array();
-
+var item_index = 0;
+var basket;
 // INDEX 정렬 창 (마감기한)
 router.get('/sort_deadline', async(req, res, next) => {
   await Article.find()
@@ -138,6 +137,28 @@ router.get('/mydips', ensureAuthenticated, async(req,res,next) => {
   
 })
 
+// 자신의 찜 목록을 확인하는 부분이다.
+router.get('/basket', ensureAuthenticated, async(req,res,next) => {
+  let userid = req.user._id;
+  // let record = {}; // 자신의 찜 목록 배열이 들어가는 객체
+  // let MyDipsResult = {};
+  console.log("현 유저의 아이디 : " + req.user._id);
+  User.findById(userid, function(user, err){
+  }).then((record) => {
+    let query = {};
+    query = record.item_List;
+    console.log(query);
+    console.log(typeof(query));
+    Article.find({_id: query}, function(err,article){
+    }).then((result) => {
+      res.render('home/basket', {data: result})
+    }).catch((err) => {
+      console.log(err);
+    })
+  })
+  
+})
+
 // Add Route
 router.get('/add', ensureAuthenticated, function(req, res){
   res.render('add_article', { title:'방 개설하기' });
@@ -162,9 +183,9 @@ router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => 
   
   mem[0] = req.user._id;
   new_post.mem_List = mem[0];
-  console.log(mem);
-  console.log(new_post.mem_List);
-  console.log(typeof(mem));
+  // console.log(mem);
+  // console.log(new_post.mem_List);
+  // console.log(typeof(mem));
   await new_post.save();
   res.redirect("/");
 }));
@@ -241,14 +262,25 @@ router.get('/:id', function(req, res){
 
 // 신청하기 버튼을 눌렀을 때. 파라메터는 article._id가 넘어옴.
 router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatcher(async(req, res, next) =>{
-  
-  // User.findById(req.params.id, function(err, joinUser){
-  //   console.log("joinUser req.params.id");
-  //   console.log(req.params.id);
-  
-
+  // var joinmem = User.findById(req.params.id, function(err, joinUser){ });
+  var joinmem = await User.findOne({item_List : req.user.item_List});
+  // console.log(joinmem);
+  // User.findById(req.params.id, function(err, joinUser){  
     Article.findById(req.params.id, function(err, article){
-      console.log(req.params.id);
+
+      let info = {};
+      info.name = joinmem.name;
+      info.email = joinmem.email;
+      info.username = joinmem.username;
+      info.password = joinmem.password;
+      info.phone = joinmem.phone;
+      info.address = joinmem.address;
+      info.mydips = joinmem.mydips;
+      info.item_count = joinmem.item_count;
+      info.item_List = joinmem.item_List;
+      
+      // console.log(info);
+
       if(article.room_maker != req.user._id){
         let record = {};
         record.deadline = article.deadline;
@@ -261,23 +293,29 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
       
 
         let query = {_id:req.params.id}
-        console.log(query);
         var limit_num = parseInt(article.members);
-        mem = article.mem_List;
-        console.log(mem);
         var index = article.current_member;
-      
-        var str =  new String();
+        
+        //article.mem_List를 mem에 복사
+        mem = article.mem_List;
 
+
+        basket =joinmem.item_List;
+        console.log(basket);
+  
+        
+        let user_query = {_id:req.user._id};
+       
         for(var i=0; i < index; i++){
-          console.log(mem.indexOf(req.user._id));
-          
+          //중복이 없으면
           if(mem.indexOf(req.user._id) == -1){
+            // mem[index]의 user._id삽입
             mem[index] = req.user._id;
-            console.log("article req.params.id");
-            // console.log(req.params.id);
-            // joinUser.basket.push(req.params.id);
-            // basket.push(req.params.id);
+            console.log(item_index);
+           
+            basket[item_index] = req.params.id;
+            console.log(basket);
+            item_index++;
             break;
           }else{
             req.flash('danger', '이미 신청하신 상품입니다!');
@@ -292,8 +330,7 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
         }else{
         
           record.mem_List = mem;
-          
-          console.log("///////////////////////////////////");
+          // info.item_List = basket;
             Article.update(query, record, function(err){
               if(err){
                 console.log(err);
@@ -303,6 +340,13 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
                 res.redirect('/');
               }
             });
+
+            User.update(user_query, info, function(err){
+              if(err){
+                console.log(err);
+                return;
+              }
+            });
           
         }
       } else {
@@ -310,8 +354,7 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
         res.redirect('/');
       }
     })
-
-  // })
+  // });
 }));
 
 // 찜 버튼이 눌렸을 때. 마찬가지로 article._id가 넘어옴.

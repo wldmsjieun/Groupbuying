@@ -43,7 +43,8 @@ router.post('/register', function(req, res){
       username:username,
       password:password,
       phone:phone,
-      address:address
+      address:address,
+      item_List : name
     });
 
     bcrypt.genSalt(10, function(err, salt){

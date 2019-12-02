@@ -26,8 +26,8 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  mydips: [mongoose.Schema.Types.Mixed]
-  // mylist: []
+  mydips: [mongoose.Schema.Types.Mixed],
+  item_List:[mongoose.Schema.Types.Mixed],
   
 });
 

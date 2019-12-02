@@ -63,9 +63,9 @@ router.get('/freeboard', errorCatcher(async(req, res, next) => {
   res.render('home/freeboard', { title: 'Freeboard' });
 }));
 /* GET Basket page. */
-router.get('/basket', errorCatcher(async(req, res, next) => {
-  res.render('home/basket', { title: 'Basket' });
-}));
+// router.get('/basket', errorCatcher(async(req, res, next) => {
+//   res.render('home/basket', { title: 'Basket' });
+// }));
 // router.get('/mydips', errorCatcher(async(req, res, next) => {
 //   res.render('home/mydips', { title: 'MyDips' });
 // }));
