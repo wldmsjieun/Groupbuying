@@ -43,6 +43,7 @@ block content
                       a(href='../articles/'+d._id)=d.title
                     p #{d.current_member} / #{d.members} 명 모집      
                     p #{d.deadline} 까지
+                    a.btn.btn-danger.delete-article(href='/articles/cancle/'+d._id, style='width:5rem') 취소
             else
               h5(style="margin-left:auto; margin-right:auto") 신청하신 목록이 없습니다.
       .col-lg-1

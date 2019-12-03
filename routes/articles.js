@@ -114,13 +114,64 @@ router.get('/search', async(req, res, next) => {
       console.log(err);
     })
 });
+router.get('/cancle/:id', errorCatcher(async(req, res, next) =>{
+  // console.log("진입");
+  var my_basket = await User.findOne({item_List : req.user.item_List});
+  // console.log(my_basket);
+  let my_info = {};
+  my_info.item_List = my_basket.item_List;
+  // console.log(my_info.item_List);
+ 
+  let item_query = req.params.id
+  let user_query = {_id:req.user._id};
+  for(var i=0; i < my_info.item_List.length; i++){
+    //중복이면
+    console.log(item_query);
+    var i = my_info.item_List.indexOf(item_query) ;
+    var article = await Article.findById(item_query);
+    // console.log(article);
+    // console.log(article.current_member);
+    if(i != -1){
+      my_info.item_List[i] = null;
+      article.current_member = article.current_member -1;
+      var mem_index = article.mem_List.indexOf(req.user._id);
+      // console.log(article.mem_List);
+      if(mem_index != -1){
+        article.mem_List[mem_index] = null;
+      }
+      // console.log(article.mem_List);
+      // console.log(article.current_member);
+      // console.log(my_info.item_List);
+      let query = {_id:req.params.id}
+      User.update(user_query, my_info, function(err){
+        if(err){
+          console.log(err);
+          return;
+        }
+        req.flash('success', '해당 상품이 같이 살까 목록에서 취소되었습니다!');
+        return res.redirect('/');
+      });
+      Article.update(query, article, function(err){
+        if(err){
+          console.log(err);
+          return;
+        }
+        return;
+      });
+      break;
+    }else{
+      req.flash('danger', '이미 취소하신 상품입니다!');
+      return res.redirect('/');
+    }
+  }
+}));
 
 // 자신의 찜 목록을 확인하는 부분이다.
 router.get('/mydips', ensureAuthenticated, async(req,res,next) => {
   let userid = req.user._id;
   let record = {}; // 자신의 찜 목록 배열이 들어가는 객체
   let MyDipsResult = {};
-  console.log("현 유저의 아이디 : " + userid);
+  // console.log("현 유저의 아이디 : " + userid);
   // 현 유저의 아이디로 찜 한 목록의 배열을 가지고온다.
   User.findById(userid, function(user, err){
   }).then((record) => {
@@ -163,7 +214,7 @@ router.get('/deletedips/:id', ensureAuthenticated, errorCatcher(async(req, res, 
       User.updateOne({mydips: result.mydips}, {mydips: query}, function(err, user){
       }).then((record) => {
         console.log("업데이트 실행 후 결과 : ", record);
-        
+
         req.flash('success', '해당 상품이 찜 목록에서 삭제되었습니다!');
         return res.redirect('/');
       })
@@ -179,13 +230,13 @@ router.get('/deletedips/:id', ensureAuthenticated, errorCatcher(async(req, res, 
 // 자신의 신청 목록을 확인하는 부분이다.
 router.get('/basket', ensureAuthenticated, async(req,res,next) => {
   let userid = req.user._id;
-  console.log("현 유저의 아이디 : " + req.user._id);
+  // console.log("현 유저의 아이디 : " + req.user._id);
   User.findById(userid, function(user, err){
   }).then((record) => {
     let query = {};
     query = record.item_List;
-    console.log(query);
-    console.log(typeof(query));
+    // console.log(query);
+    // console.log(typeof(query));
     Article.find({_id: query}, function(err,article){
     }).then((result) => {
       res.render('home/basket', {data: result})
