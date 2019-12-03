@@ -96,6 +96,7 @@ block content
             a.btn.btn-secondary(role='button' href='/articles/edit/'+article._id, style='width:5rem; margin-right:1rem') 수정
             a.btn.btn-danger.delete-article(href='/articles/delete/'+article._id, style='width:5rem') 삭제
         
+        a.btn.btn-danger.delete-article(href='/articles/deletedips/'+article._id, style='width:5rem') 찜 취소
         a.btn.btn-warning(role='button' href='/articles/dips/'+article._id, style='width:7rem; margin-right:1rem;float:right') 찜
         if article.members>article.current_member
           a.btn.btn-primary(role='button' href='/articles/join/'+article._id, style='width:7rem; margin-right:1rem;float:right') 신청

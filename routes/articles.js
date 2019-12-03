@@ -135,13 +135,50 @@ router.get('/mydips', ensureAuthenticated, async(req,res,next) => {
     })
   })
   
-})
+});
 
-// 자신의 찜 목록을 확인하는 부분이다.
+// 찜 신청 취소를 처리하는 부분.
+// 찜 취소는 우선 로그인이 되어있는지 확인 후
+// 자신이 신청을 했는지 안했는지 확인을 해줘야 함
+
+// 신청이 되어있으면 delete 아니면 신청 불가
+router.get('/deletedips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) => {
+  let itemid = req.params.id;
+  let userid = req.user._id;
+  console.log("아이템 아이디 값 : " + itemid); // 취소하려는 아이템의 아이디.
+  // 유저의 아이디로 찜 배열을 가지고 온다.
+  User.findById(userid, function(err, user){
+  }).then((result) => {
+    let query = {}; // 빈 Object를 생성.
+    query = result.mydips; // 해당 유저의 찜 배열을 뽑아옴.
+    console.log("유저의 배열? : " , query);
+    console.log("result.madips = ", result.mydips);
+    // 배열에 삭제하려는 아이템의 아이디가 있는지 확인.
+    let idx = query.indexOf(itemid);
+    console.log("idx 값은 ?? : " + idx);
+    if (idx != -1){
+      // 해당 아이템의 아이디가 있는 경우, 해당 아이디 값을 삭제함.
+      query.splice(idx, 1);
+      console.log("삭제 후 배열 ? : ", query);
+      User.updateOne({mydips: result.mydips}, {mydips: query}, function(err, user){
+      }).then((record) => {
+        console.log("업데이트 실행 후 결과 : ", record);
+        
+        req.flash('success', '해당 상품이 찜 목록에서 삭제되었습니다!');
+        return res.redirect('/');
+      })
+    } else {
+      // 해당 아이템의 아이디가 없는 경우
+      req.flash('danger', '해당 상품이 찜 목록에 없습니다!');
+      return res.redirect('/');
+    }
+
+  })
+}));
+
+// 자신의 신청 목록을 확인하는 부분이다.
 router.get('/basket', ensureAuthenticated, async(req,res,next) => {
   let userid = req.user._id;
-  // let record = {}; // 자신의 찜 목록 배열이 들어가는 객체
-  // let MyDipsResult = {};
   console.log("현 유저의 아이디 : " + req.user._id);
   User.findById(userid, function(user, err){
   }).then((record) => {
@@ -358,15 +395,15 @@ router.get('/dips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
       
       User.findOneAndUpdate(user_query, update, options)
       .then(result => {
-        // console.log(user_query);
+        // console.log(result);
         User.findById(user_query, function(user, err){
           dips = req.user.mydips;  // 신청하기 전에 유저의 찜 목록을 배열에 저장.
-          console.log("신청하기 전의 dips 배열 : " + dips);
+          // console.log("신청하기 전의 dips 배열 : " + dips);
         }).then(result => {
           for(let i=0; i<dips.length; i++){
             if (dips.indexOf(item_query) == -1){
               req.flash('success', '찜 목록에 추가되었습니다!');
-              console.log("신청한 후 dips 배열 : " + dips);
+              // console.log("신청한 후 dips 배열 : " + dips);
               return res.redirect('/');    
             } else {
               req.flash('danger', '중복 신청입니다!');
