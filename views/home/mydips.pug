@@ -44,6 +44,7 @@ block content
                       a(href='../articles/'+d._id)=d.title
                     p #{d.current_member} / #{d.members} 명 모집      
                     p #{d.deadline} 까지
+                    a.btn.btn-danger.delete-article(href='/articles/deletedips/'+d._id, style='width:5rem') 찜 취소
             else
                 h5(style="margin-left:auto; margin-right:auto") 찜 목록이 비어있습니다.
 

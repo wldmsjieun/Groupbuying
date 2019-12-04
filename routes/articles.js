@@ -51,7 +51,6 @@ router.get('/sort_recent_enroll', async(req, res, next) => {
       var left = [], right = [];
       for(var i = 1; i < len; i++) {
         if ( Number(arr[i].startdate.replace(/-/gi,'')) > Number(middle.startdate.replace(/-/gi,'')) ){
-          // console.log(arr[i].startdate);
           left.push(arr[i]);  // replace에서 xxxx-xx-xx 문자열에서 -를 지워줌.
         } else {
           right.push(arr[i]);
@@ -98,12 +97,10 @@ router.get('/sort_pernum', async(req, res, next) => {
 //검색
 router.get('/search', async(req, res, next) => {
   const searchItem = req.query.item;
-  // console.log(searchItem)
   await Article.find({item : {$regex: searchItem}})
     .then((result) =>{
       console.log(result);
       typeof(result);
-      // 검색 결과가 없으면 떠야하는데 이부분 일단 스킵.
       if (result != null){
         res.render('index', {data: result})
       } else {
@@ -114,34 +111,52 @@ router.get('/search', async(req, res, next) => {
       console.log(err);
     })
 });
+
+router.get('/deletedips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) => {
+  var my_dips = await User.findOne({mydips : req.user.mydips});
+  let dips = {};
+  dips.mydips = my_dips.mydips;
+
+  let item_query = req.params.id;
+  let user_query = {_id:req.user.id};
+  for (var i = 0; i < dips.mydips.length; i++){
+    var i = dips.mydips.indexOf(item_query);
+    if ( i != -1 ){
+      dips.mydips[i] = null;
+      User.update(user_query, dips, function(err){
+        if(err){
+          console.log(err);
+          return;
+        }
+        req.flash('success', '해당 상품이 찜 목록에서 삭제 되었습니다!');
+        return res.redirect('/');
+      });
+      break;
+    } else {
+      req.flash('danger', '해당 상품이 찜 목록에 없습니다!');
+      return res.redirect('/');
+    }
+  }
+}));
+
 router.get('/cancle/:id', errorCatcher(async(req, res, next) =>{
-  // console.log("진입");
   var my_basket = await User.findOne({item_List : req.user.item_List});
-  // console.log(my_basket);
   let my_info = {};
   my_info.item_List = my_basket.item_List;
-  // console.log(my_info.item_List);
  
   let item_query = req.params.id
   let user_query = {_id:req.user._id};
   for(var i=0; i < my_info.item_List.length; i++){
     //중복이면
-    console.log(item_query);
     var i = my_info.item_List.indexOf(item_query) ;
     var article = await Article.findById(item_query);
-    // console.log(article);
-    // console.log(article.current_member);
     if(i != -1){
       my_info.item_List[i] = null;
       article.current_member = article.current_member -1;
       var mem_index = article.mem_List.indexOf(req.user._id);
-      // console.log(article.mem_List);
       if(mem_index != -1){
         article.mem_List[mem_index] = null;
       }
-      // console.log(article.mem_List);
-      // console.log(article.current_member);
-      // console.log(my_info.item_List);
       let query = {_id:req.params.id}
       User.update(user_query, my_info, function(err){
         if(err){
@@ -169,15 +184,12 @@ router.get('/cancle/:id', errorCatcher(async(req, res, next) =>{
 // 자신의 찜 목록을 확인하는 부분이다.
 router.get('/mydips', ensureAuthenticated, async(req,res,next) => {
   let userid = req.user._id;
-  let record = {}; // 자신의 찜 목록 배열이 들어가는 객체
-  let MyDipsResult = {};
   // console.log("현 유저의 아이디 : " + userid);
   // 현 유저의 아이디로 찜 한 목록의 배열을 가지고온다.
   User.findById(userid, function(user, err){
   }).then((record) => {
     let query = {};
     query = record.mydips;
-    console.log(typeof(query));
     Article.find({_id: query}, function(err,article){
     }).then((result) => {
       res.render('home/mydips', {data: result})
@@ -188,55 +200,13 @@ router.get('/mydips', ensureAuthenticated, async(req,res,next) => {
   
 });
 
-// 찜 신청 취소를 처리하는 부분.
-// 찜 취소는 우선 로그인이 되어있는지 확인 후
-// 자신이 신청을 했는지 안했는지 확인을 해줘야 함
-
-// 신청이 되어있으면 delete 아니면 신청 불가
-router.get('/deletedips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) => {
-  let itemid = req.params.id;
-  let userid = req.user._id;
-  console.log("아이템 아이디 값 : " + itemid); // 취소하려는 아이템의 아이디.
-  // 유저의 아이디로 찜 배열을 가지고 온다.
-  User.findById(userid, function(err, user){
-  }).then((result) => {
-    let query = {}; // 빈 Object를 생성.
-    query = result.mydips; // 해당 유저의 찜 배열을 뽑아옴.
-    console.log("유저의 배열? : " , query);
-    console.log("result.madips = ", result.mydips);
-    // 배열에 삭제하려는 아이템의 아이디가 있는지 확인.
-    let idx = query.indexOf(itemid);
-    console.log("idx 값은 ?? : " + idx);
-    if (idx != -1){
-      // 해당 아이템의 아이디가 있는 경우, 해당 아이디 값을 삭제함.
-      query.splice(idx, 1);
-      console.log("삭제 후 배열 ? : ", query);
-      User.updateOne({mydips: result.mydips}, {mydips: query}, function(err, user){
-      }).then((record) => {
-        console.log("업데이트 실행 후 결과 : ", record);
-
-        req.flash('success', '해당 상품이 찜 목록에서 삭제되었습니다!');
-        return res.redirect('/');
-      })
-    } else {
-      // 해당 아이템의 아이디가 없는 경우
-      req.flash('danger', '해당 상품이 찜 목록에 없습니다!');
-      return res.redirect('/');
-    }
-
-  })
-}));
-
 // 자신의 신청 목록을 확인하는 부분이다.
 router.get('/basket', ensureAuthenticated, async(req,res,next) => {
   let userid = req.user._id;
-  // console.log("현 유저의 아이디 : " + req.user._id);
   User.findById(userid, function(user, err){
   }).then((record) => {
     let query = {};
     query = record.item_List;
-    // console.log(query);
-    // console.log(typeof(query));
     Article.find({_id: query}, function(err,article){
     }).then((result) => {
       res.render('home/basket', {data: result})
@@ -268,12 +238,8 @@ router.post("/add",upload.single('picture'),errorCatcher(async(req,res,next) => 
     picture_url : "/picture/" + name,  // 품목사진
  
   });
-  
   mem[0] = req.user._id;
   new_post.mem_List = mem[0];
-  // console.log(mem);
-  // console.log(new_post.mem_List);
-  // console.log(typeof(mem));
   await new_post.save();
   res.redirect("/");
 }));
@@ -303,8 +269,6 @@ router.post('/edit/:id', function(req, res){
   article.title = req.body.title;
   article.members = req.body.members;
   article.comment = req.body.comment;
-  //article.current_member = req.body.current_member; //신청인원이라 바꿀필요 없음
-
   let query = {_id:req.params.id}
 
   Article.update(query, article, function(err){
@@ -356,7 +320,6 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
       let info = {};
       info.item_List = joinmem.item_List;
     
-
       if(article.room_maker != req.user._id){
         let record = {};
         record.deadline = article.deadline;
@@ -367,14 +330,11 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
         record.comment = article.comment;
         record.current_member = article.current_member+1;
       
-
         let query = {_id:req.params.id}
         var limit_num = parseInt(article.members);
         var index = article.current_member;
         
-        //article.mem_List를 mem에 복사
         mem = article.mem_List;
-
 
         basket =joinmem.item_List;
        
@@ -399,7 +359,6 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
           req.flash('danger', '인원이 마감되었습니다!');
           res.redirect('/');
         }else{
-        
           record.mem_List = mem;
           // info.item_List = basket;
             Article.update(query, record, function(err){
@@ -411,14 +370,12 @@ router.get('/join/:id',upload.single('picture'), ensureAuthenticated, errorCatch
                 res.redirect('/');
               }
             });
-
             User.update(user_query, info, function(err){
               if(err){
                 console.log(err);
                 return;
               }
             });
-          
         }
       } else {
         req.flash('danger', '방 개설자는 신청할 수 없습니다.');
@@ -477,7 +434,6 @@ router.get('/dips/:id', ensureAuthenticated, errorCatcher(async(req, res, next) 
     }
   }
 )}));
-
 
 
 // Access Control
