@@ -48,7 +48,7 @@ block content
               div
                 button.btn.btn-primary.btn-block(type='submit', value='Submit') 로그인
               #but
-                button(type="button" style="width:110px", onclick="location.href='./forgot'") ID/PW찾기
+                button(type="button" style="width:110px", onclick="location.href='/'") ID/PW찾기
                 button(type="button" style='margin-left : 10px; width:110px;' onclick="location.href='/users/register'") 회원가입
         #category
           p(align='center' style='font-size:1rem') 카테고리
@@ -96,7 +96,7 @@ block content
             a.btn.btn-secondary(role='button' href='/articles/edit/'+article._id, style='width:5rem; margin-right:1rem') 수정
             a.btn.btn-danger.delete-article(href='/articles/delete/'+article._id, style='width:5rem') 삭제
         
-        a.btn.btn-danger.delete-article(href='/articles/deletedips/'+article._id, style='width:5rem') 찜 취소
+        
         a.btn.btn-warning(role='button' href='/articles/dips/'+article._id, style='width:7rem; margin-right:1rem;float:right') 찜
         if article.members>article.current_member
           a.btn.btn-primary(role='button' href='/articles/join/'+article._id, style='width:7rem; margin-right:1rem;float:right') 신청
